@@ -8,10 +8,66 @@
 <body>
 <div class="container">
 
+    <!--    Navbar menu -->
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Contact Manager</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/add">Add Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Pricing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!--  Div para desplegar tabla  -->
     <div class="container text-center" style="margin: 30px">
         <h3>YEStravel Contact Manager</h3>
     </div>
 
+    <div class="container">
+
+    <table class="table table-stripped table-hover align-middle">
+        <thead class="table-dark text-center">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">姓</th>
+            <th scope="col">名字</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Email</th>
+        </tr>
+        </thead>
+        <tbody class="text-center">
+        <tr>
+            <th scope="row">1</th>
+            <td>Sandy</td>
+            <td>Li</td>
+            <td>李</td>
+            <td>慎之</td>
+            <td>+44845564854</td>
+            <td>sandyli@yestravel.com</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
