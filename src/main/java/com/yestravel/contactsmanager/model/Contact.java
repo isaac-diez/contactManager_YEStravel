@@ -7,6 +7,9 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -15,11 +18,14 @@ import lombok.NoArgsConstructor;
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer idContact;
-    String familyNameEng;
-    String firstNameEng;
-    String familyNameCh;
-    String firstNameCh;
-    String mobilePhone;
-    String email;
+    private Integer idContact;
+    private String familyNameEng;
+    private String firstNameEng;
+    private String familyNameCh;
+    private String firstNameCh;
+    private String mobilePhone;
+    private String email;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
 }
