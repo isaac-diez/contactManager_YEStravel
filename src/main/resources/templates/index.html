@@ -37,8 +37,8 @@
             <td th:text="${contact.familyNameCh}"></td>
             <td th:text="${contact.mobilePhone}"></td>
             <td th:text="${contact.email}"></td>
-            <td th:text="${contact.birthDate}"></td>
-            <td class="text-center">
+            <td th:text="${#temporals.format(contact.birthDate, 'dd-MM-yyyy')}"></td>
+            <td>
                 <div class="container">
                     <a th:href="@{/edit/{id}(id=${contact.idContact})}"
                        class="btn btn-warning btn-sm me-3">Edit</a>
