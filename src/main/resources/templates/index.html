@@ -1,40 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>YEStravel Contact Manager</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header::header-section(title='Home')}"></head>
 <body>
 <div class="container">
 
     <!--    Navbar menu -->
-    <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Contact Manager</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/add">Add Contact</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Pricing</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
+<div th:replace="~{fragments/navbar::navbar-section}"></div>
 
     <!--  Div para desplegar tabla  -->
     <div class="container text-center" style="margin: 30px">
@@ -43,7 +14,7 @@
 
     <div class="container">
 
-    <table class="table table-stripped table-hover align-middle">
+    <table class="table table-striped table-hover align-middle">
         <thead class="table-dark text-center">
         <tr>
             <th scope="col">#</th>
@@ -53,23 +24,34 @@
             <th scope="col">名字</th>
             <th scope="col">Phone</th>
             <th scope="col">Email</th>
+            <th scope="col">Birthday</th>
+            <th scope="col"></th>
         </tr>
         </thead>
         <tbody class="text-center">
-        <tr>
-            <th scope="row">1</th>
-            <td>Sandy</td>
-            <td>Li</td>
-            <td>李</td>
-            <td>慎之</td>
-            <td>+44845564854</td>
-            <td>sandyli@yestravel.com</td>
+        <tr th:each="contact : ${contacts}">
+            <th th:text="${contact.idContact}" scope="row"></th>
+            <td th:text="${contact.firstNameEng}"></td>
+            <td th:text="${contact.familyNameEng}"></td>
+            <td th:text="${contact.firstNameCh}"></td>
+            <td th:text="${contact.familyNameCh}"></td>
+            <td th:text="${contact.mobilePhone}"></td>
+            <td th:text="${contact.email}"></td>
+            <td th:text="${contact.birthDate}"></td>
+            <td class="text-center">
+                <div class="container">
+                    <a th:href="@{/edit/{id}(id=${contact.idContact})}"
+                       class="btn btn-warning btn-sm me-3">Edit</a>
+                    <a th:href="@{/delete/{id}(id=${contact.idContact})}"
+                       class="btn btn-danger btn-sm me-3">Delete</a>
+                </div>
+            </td>
         </tr>
         </tbody>
     </table>
     </div>
+    <div th:replace="~{fragments/footer::footer-section}"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 </html>
