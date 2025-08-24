@@ -5,6 +5,7 @@ import com.yestravel.contactsmanager.repo.ContactRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,6 +19,16 @@ public class ContactServiceImpl implements IContactService {
 
         return contactRepo.findAll();
 
+    }
+
+    @Override
+    public List<Contact> birthdayListContact(){
+
+        int nextMonth = (LocalDate.now().getMonthValue() % 12) + 1;
+        return contactRepo.findAll().stream()
+                .filter(c -> c.getBirthDate() != null &&
+                        c.getBirthDate().getMonthValue() == nextMonth)
+                .toList();
     }
 
     @Override
