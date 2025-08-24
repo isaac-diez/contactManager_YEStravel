@@ -8,6 +8,8 @@ public interface IContactService {
 
     public List<Contact> listContact();
 
+    public List<Contact> birthdayListContact();
+
     public Contact findContactById(Integer contactId);
 
     public void saveContact(Contact contact);
