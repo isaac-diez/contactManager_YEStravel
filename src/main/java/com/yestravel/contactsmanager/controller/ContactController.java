@@ -71,4 +71,12 @@ public class ContactController {
         contactService.deleteContact(contact);
         return "redirect:/"; //redirect controller to path "/"
     }
+
+    @GetMapping("/birthday")
+    public String showBirthdays(ModelMap model) {
+        List<Contact> birthdayContactList = contactService.birthdayListContact();
+        birthdayContactList.forEach(contact -> logger.info(contact.toString()));
+        model.put("birthdayContactList", birthdayContactList);
+        return "birthday"; //birthday.html
+    }
 }
