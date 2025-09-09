@@ -5,12 +5,11 @@ import com.yestravel.contactsmanager.service.IContactService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,10 +22,14 @@ public class ContactController {
     IContactService contactService;
 
     @GetMapping("/")
-    public String init(ModelMap model) {
-        List<Contact> contacts = contactService.listContact();
-        contacts.forEach(contact -> logger.info(contact.toString()));
-        model.put("contacts",contacts);
+    public String listContact(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            Model model) {
+
+        Page<Contact> contactPage = contactService.getContacts(page, size);
+        contactPage.forEach(contact -> logger.info(contact.toString()));
+        model.addAttribute("contactPage",contactPage);
         return "index"; //index.html
     }
 
