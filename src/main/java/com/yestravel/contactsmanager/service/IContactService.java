@@ -11,7 +11,7 @@ public interface IContactService {
 
     public Page<Contact> getContacts(int pageNumber, int pageSize);
 
-    public List<Contact> birthdayListContact();
+    public Page<Contact> getBirthdayContacts(int pageNumber, int pageSize);
 
     public Contact findContactById(Integer contactId);
 

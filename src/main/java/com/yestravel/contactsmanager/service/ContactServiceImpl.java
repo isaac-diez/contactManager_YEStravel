@@ -5,6 +5,7 @@ import com.yestravel.contactsmanager.repo.ContactRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,13 +30,11 @@ public class ContactServiceImpl implements IContactService {
     }
 
     @Override
-    public List<Contact> birthdayListContact(){
+    public Page<Contact> getBirthdayContacts(int pageNumber, int pageSize){
 
         int nextMonth = (LocalDate.now().getMonthValue() % 12) + 1;
-        return contactRepo.findAll().stream()
-                .filter(c -> c.getBirthDate() != null &&
-                        c.getBirthDate().getMonthValue() == nextMonth)
-                .toList();
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("birthDate"));
+        return contactRepo.findByBirthDateMonth(nextMonth, pageRequest);
     }
 
     @Override
