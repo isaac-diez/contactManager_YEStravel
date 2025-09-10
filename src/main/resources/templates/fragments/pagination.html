@@ -1,49 +1,55 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="pagination-section (basePath)" th:remove="tag">
 
-<div th:fragment="pagination-section" th:remove="tag">
-
-    <!-- Pagination navigation -->
     <ul class="pagination">
-        <!-- "First" link -->
+
+        <!-- First -->
         <li class="page-item" th:if="${contactPage.number > 0}">
-            <a class="page-link" th:href="@{/(page=0,size=${contactPage.size})}" aria-label="First">
-                <span aria-hidden="true">« First</span>
-            </a>
+            <a class="page-link"
+               th:href="@{${basePath}(page=0,size=${contactPage.size})}"
+               aria-label="First"><span aria-hidden="true">« First</span></a>
         </li>
 
-        <!-- "Previous" link -->
+        <!-- Previous -->
         <li class="page-item" th:if="${contactPage.hasPrevious()}">
-            <a class="page-link" th:href="@{/(page=${contactPage.number - 1},size=${contactPage.size})}" aria-label="Previous">
-                <span aria-hidden="true">‹ Prev</span>
-            </a>
+            <a class="page-link"
+               th:href="@{${basePath}(page=${contactPage.number - 1},size=${contactPage.size})}"
+               aria-label="Previous"><span aria-hidden="true">‹ Prev</span></a>
         </li>
 
-        <!-- Page numbers (show a window around the current page) -->
-        <li class="page-item" th:each="i : ${#numbers.sequence(
-            T(java.lang.Math).max(0, contactPage.number - 2),
-            T(java.lang.Math).min(contactPage.totalPages - 1, contactPage.number + 2))}">
+        <!-- Page numbers (window around current page) -->
+        <li class="page-item"
+            th:each="i : ${#numbers.sequence(
+                T(java.lang.Math).max(0, contactPage.number - 2),
+                T(java.lang.Math).min(contactPage.totalPages - 1, contactPage.number + 2))}">
+            <!-- non‑current pages -->
             <a class="page-link"
                th:if="${i != contactPage.number}"
-               th:href="@{/(page=${i},size=${contactPage.size})}"
+               th:href="@{${basePath}(page=${i},size=${contactPage.size})}"
                th:text="${i + 1}">1</a>
+
+            <!-- current page – highlighted, no link -->
+            <span class="page-link active"
+                  th:if="${i == contactPage.number}"
+                  th:text="${i + 1}"></span>
         </li>
 
-        <!-- "Next" link -->
+        <!-- Next -->
         <li class="page-item" th:if="${contactPage.hasNext()}">
-            <a class="page-link" th:href="@{/(page=${contactPage.number + 1},size=${contactPage.size})}" aria-label="Next">
-                <span aria-hidden="true">Next ›</span>
-            </a>
+            <a class="page-link"
+               th:href="@{${basePath}(page=${contactPage.number + 1},size=${contactPage.size})}"
+               aria-label="Next"><span aria-hidden="true">Next ›</span></a>
         </li>
 
-        <!-- "Last" link -->
-        <li class="page-item" th:if="${contactPage.number < contactPage.totalPages - 1}">
-            <a class="page-link" th:href="@{/(page=${contactPage.totalPages - 1},size=${contactPage.size})}" aria-label="Last">
-                <span aria-hidden="true">Last »</span>
-            </a>
+        <!-- Last -->
+        <li class="page-item"
+            th:if="${contactPage.number < contactPage.totalPages - 1}">
+            <a class="page-link"
+               th:href="@{${basePath}(page=${contactPage.totalPages - 1},size=${contactPage.size})}"
+               aria-label="Last"><span aria-hidden="true">Last »</span></a>
         </li>
     </ul>
 
 </div>
-
 </html>

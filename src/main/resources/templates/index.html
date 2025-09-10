@@ -49,7 +49,9 @@
             </tr>
             </tbody>
         </table>
-        <div th:replace="~{fragments/pagination::pagination-section}"></div>
+        <div th:with="basePath='/'">
+            <div th:replace="~{fragments/pagination :: pagination-section(basePath=${basePath})}"></div>
+            </div>
     </div>
     <div th:replace="~{fragments/footer::footer-section}"></div>
 </div>

@@ -1,9 +1,6 @@
 package com.yestravel.contactsmanager.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "contact")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,6 +24,7 @@ public class Contact {
     private String mobilePhone;
     private String email;
 
+    @Column(name = "birth_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 }

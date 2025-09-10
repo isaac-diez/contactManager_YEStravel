@@ -76,10 +76,16 @@ public class ContactController {
     }
 
     @GetMapping("/birthday")
-    public String showBirthdays(ModelMap model) {
-        List<Contact> birthdayContactList = contactService.birthdayListContact();
-        birthdayContactList.forEach(contact -> logger.info(contact.toString()));
-        model.put("birthdayContactList", birthdayContactList);
+    public String listBirthdays(
+        @RequestParam(name= "page", defaultValue = "0") int page,
+        @RequestParam(name= "size", defaultValue = "10") int size,
+        Model model) {
+
+        Page<Contact> birthdayContactPage = contactService.getBirthdayContacts(page, size);
+        birthdayContactPage.forEach(contact -> logger.info(contact.toString()));
+        model.addAttribute("contactPage", birthdayContactPage);
         return "birthday"; //birthday.html
+
     }
+
 }
