@@ -3,6 +3,7 @@ package com.yestravel.contactsmanager.security;
 import com.yestravel.contactsmanager.model.Role;
 import com.yestravel.contactsmanager.model.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -141,6 +142,15 @@ class JwtServiceTest {
         assertFalse(token.isEmpty());
         assertTrue(jwtService.isTokenValid(token, userDetails));
         assertEquals(userDetails.getAuthorities().stream().findFirst().map(Object::toString).orElse(""), roleFromClaim);
+    }
+
+    @Test
+    void extractClaim_ShouldReturnInvalidTokenException() {
+
+        String invalidToken = "invalidToken";
+
+        assertThrows(JwtException.class, () -> jwtService.extractClaim(invalidToken, Claims::getSubject));
+
     }
 
     @Test
