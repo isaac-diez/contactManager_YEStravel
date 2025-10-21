@@ -32,30 +32,76 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        final String authHeader = request.getHeader("Authorization");
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        final String path = request.getServletPath();
+        if (path.startsWith("/auth/") || path.equals("/login") || path.equals("/register")
+                || path.startsWith("/css/") || path.startsWith("/js/")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        final String jwt = authHeader.substring(7);
-        final String username = jwtService.extractUsername(jwt);
-
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities());
-
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+        String jwt = getTokenFromHeader(request);
+        if (jwt == null) {
+            jwt = getTokenFromCookie(request);
+            if (jwt != null) {
+                logger.info("Token encontrado en la cookie para la ruta: " + request.getServletPath());
+            } else {
+                logger.warn("NO se encontró token (ni en cabecera ni en cookie) para la ruta: " + request.getServletPath());
             }
         }
+
+        if (jwt == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            final String username = jwtService.extractUsername(jwt);
+            logger.info("Intento de autenticación para usuario: " + username); // LOG 1
+
+            // Comprueba que el usuario existe Y que no está ya autenticado
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                if (jwtService.isTokenValid(jwt, userDetails)) {
+                    logger.info("Token VÁLIDO. Autoridades: " + userDetails.getAuthorities()); // LOG 2
+
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities());
+
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    logger.info("Usuario AUTENTICADO en SecurityContext."); // LOG 3
+                } else {
+                    logger.warn("Token INVÁLIDO o no coincide con userDetails."); // LOG 4
+                }
+            }
+        } catch (UsernameNotFoundException ex) {
+            logger.error("Usuario del token NO ENCONTRADO: " + jwtService.extractUsername(jwt)); // LOG 5
+        } catch (Exception e) {
+            logger.error("Fallo general de JWT (expirado, firma): " + e.getMessage()); // LOG 6
+        }
         filterChain.doFilter(request, response);
+    }
+
+    private String getTokenFromHeader(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+        return null;
+    }
+
+    private String getTokenFromCookie(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("jwtToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 }
