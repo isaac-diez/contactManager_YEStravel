@@ -2,20 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header::header-section(title='Home')}"></head>
 <body>
-<script type="module">
-    import { requireAuth, fetchWithAuth } from '/js/auth.js';
-
-    async function loadContacts() {
-        if (!requireAuth()) return;
-
-        const res = await fetchWithAuth('/contacts');
-        const contacts = await res.json();
-        console.log('Contacts:', contacts);
-    }
-
-    loadContacts();
-</script>
-
 <div class="container">
 
     <!--    Navbar menu -->
