@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/contacts")
 public class ContactController {
 
     private static final Logger logger = LoggerFactory.getLogger(ContactController.class);
@@ -19,7 +20,7 @@ public class ContactController {
     @Autowired
     ContactService contactService;
 
-    @GetMapping("/")
+    @GetMapping({"/", ""})
     public String listContact(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size,
