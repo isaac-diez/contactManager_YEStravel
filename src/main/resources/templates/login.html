@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<h2>Login</h2>
+
+<form id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required/><br/><br/>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required/><br/><br/>
+
+    <button type="submit">Login</button>
+</form>
+
+<p id="message" style="color:red;"></p>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const data = {
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value
+        };
+
+        try {
+            const response = await fetch('/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            // Ya no esperamos un JSON, solo una respuesta exitosa (200 OK)
+            if (response.ok) {
+                document.getElementById('message').style.color = 'green';
+                document.getElementById('message').textContent = 'Login successful!';
+
+                // ¡No necesitas hacer NADA con el token!
+                // El navegador ya ha recibido la cookie.
+                // Simplemente redirige.
+                window.location.href = "/contacts";
+
+            } else {
+                // Si el login falla, el servidor puede devolver un JSON de error
+                const result = await response.json();
+                document.getElementById('message').style.color = 'red';
+                document.getElementById('message').textContent = result.message || 'Login failed';
+            }
+        } catch (err) {
+            // ...
+        }
+    });
+</script>
+</body>
+</html>
