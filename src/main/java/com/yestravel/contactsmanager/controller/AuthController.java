@@ -7,6 +7,9 @@ import com.yestravel.contactsmanager.exception.UsernameAlreadyExistsException;
 import com.yestravel.contactsmanager.model.User;
 import com.yestravel.contactsmanager.security.JwtService;
 import com.yestravel.contactsmanager.service.UserService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,12 +42,27 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody AuthRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
         String token = jwtService.generateToken(userService.loadUserByUsername(request.getUsername()));
-        return new AuthResponse(token);
+
+        ResponseCookie cookie = ResponseCookie.from("jwtToken", token)
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(60 * 60 * 24)
+                .build();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
+
+        AuthResponse responseBody = new AuthResponse(token);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(responseBody);
     }
 }
 
