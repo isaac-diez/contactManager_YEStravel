@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "interactions")
 @Data
@@ -16,8 +18,8 @@ public class Interaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String type;
-    private String date;
+    private InteractionType type;
+    private LocalDateTime date;
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
