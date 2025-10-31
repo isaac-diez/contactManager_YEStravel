@@ -1,52 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="pagination-section (basePath)" th:remove="tag">
+<div th:fragment="pagination-section (pageObj, basePath)" th:remove="tag">
 
     <ul class="pagination">
 
         <!-- First -->
-        <li class="page-item" th:if="${contactPage.number > 0}">
+        <li class="page-item" th:if="${pageObj.number > 0}">
             <a class="page-link"
-               th:href="@{${basePath}(page=0,size=${contactPage.size})}"
+               th:href="@{${basePath}(page=0,size=${pageObj.size})}"
                aria-label="First"><span aria-hidden="true">« First</span></a>
         </li>
 
         <!-- Previous -->
-        <li class="page-item" th:if="${contactPage.hasPrevious()}">
+        <li class="page-item" th:if="${pageObj.hasPrevious()}">
             <a class="page-link"
-               th:href="@{${basePath}(page=${contactPage.number - 1},size=${contactPage.size})}"
+               th:href="@{${basePath}(page=${pageObj.number - 1},size=${pageObj.size})}"
                aria-label="Previous"><span aria-hidden="true">‹ Prev</span></a>
         </li>
 
         <!-- Page numbers (window around current page) -->
         <li class="page-item"
             th:each="i : ${#numbers.sequence(
-                T(java.lang.Math).max(0, contactPage.number - 2),
-                T(java.lang.Math).min(contactPage.totalPages - 1, contactPage.number + 2))}">
-            <!-- non‑current pages -->
+                T(java.lang.Math).max(0, pageObj.number - 2),
+                T(java.lang.Math).min(pageObj.totalPages - 1, pageObj.number + 2))}">
+            <!-- non-current pages -->
             <a class="page-link"
-               th:if="${i != contactPage.number}"
-               th:href="@{${basePath}(page=${i},size=${contactPage.size})}"
+               th:if="${i != pageObj.number}"
+               th:href="@{${basePath}(page=${i},size=${pageObj.size})}"
                th:text="${i + 1}">1</a>
 
             <!-- current page – highlighted, no link -->
             <span class="page-link active"
-                  th:if="${i == contactPage.number}"
+                  th:if="${i == pageObj.number}"
                   th:text="${i + 1}"></span>
         </li>
 
         <!-- Next -->
-        <li class="page-item" th:if="${contactPage.hasNext()}">
+        <li class="page-item" th:if="${pageObj.hasNext()}">
             <a class="page-link"
-               th:href="@{${basePath}(page=${contactPage.number + 1},size=${contactPage.size})}"
+               th:href="@{${basePath}(page=${pageObj.number + 1},size=${pageObj.size})}"
                aria-label="Next"><span aria-hidden="true">Next ›</span></a>
         </li>
 
         <!-- Last -->
         <li class="page-item"
-            th:if="${contactPage.number < contactPage.totalPages - 1}">
+            th:if="${pageObj.number < pageObj.totalPages - 1}">
             <a class="page-link"
-               th:href="@{${basePath}(page=${contactPage.totalPages - 1},size=${contactPage.size})}"
+               th:href="@{${basePath}(page=${pageObj.totalPages - 1},size=${pageObj.size})}"
                aria-label="Last"><span aria-hidden="true">Last »</span></a>
         </li>
     </ul>
