@@ -16,7 +16,8 @@ import java.time.LocalDate;
 public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idContact;
+    private Long id;
+
     private String familyNameEng;
     private String firstNameEng;
     private String familyNameCh;
