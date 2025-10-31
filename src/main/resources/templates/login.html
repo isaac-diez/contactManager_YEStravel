@@ -33,6 +33,9 @@
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
 
+        const messageEl = document.getElementById('message');
+        messageEl.textContent = ''; // clear previous message
+
         const data = {
             username: document.getElementById('username').value,
             password: document.getElementById('password').value
@@ -42,21 +45,21 @@
             const response = await fetch('/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
+                credentials: 'include' // ensures cookie-based JWT is sent/received
             });
 
             if (response.ok) {
-                document.getElementById('message').style.color = 'green';
-                document.getElementById('message').textContent = 'Login successful!';
-                window.location.href = "/contacts/";
+                // Do NOT show "Login successful" message; redirect immediately
+                window.location.replace("/contacts/"); // replace prevents back button showing login page
             } else {
                 const result = await response.json().catch(() => ({ message: 'Login failed' }));
-                document.getElementById('message').style.color = 'red';
-                document.getElementById('message').textContent = result.message || 'Login failed';
+                messageEl.style.color = 'red';
+                messageEl.textContent = result.message || 'Invalid username or password';
             }
         } catch (err) {
-            document.getElementById('message').style.color = 'red';
-            document.getElementById('message').textContent = 'An error occurred during login.';
+            messageEl.style.color = 'red';
+            messageEl.textContent = 'An error occurred during login.';
         }
     });
 </script>
