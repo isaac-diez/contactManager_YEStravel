@@ -30,7 +30,7 @@
         </thead>
         <tbody class="text-center">
         <tr th:each="contact : ${contactPage.content}">
-            <th th:text="${contact.idContact}" scope="row"></th>
+            <th th:text="${contact.id}" scope="row"></th>
             <td th:text="${contact.firstNameEng}"></td>
             <td th:text="${contact.familyNameEng}"></td>
             <td th:text="${contact.firstNameCh}"></td>
@@ -40,9 +40,9 @@
             <td th:text="${#temporals.format(contact.birthDate, 'dd-MM-yyyy')}"></td>
             <td>
                 <div class="container">
-                    <a th:href="@{/edit/{id}(id=${contact.idContact})}"
+                    <a th:href="@{/edit/{id}(id=${contact.id})}"
                        class="btn btn-warning btn-sm me-3">Edit</a>
-                    <a th:href="@{/delete/{id}(id=${contact.idContact})}"
+                    <a th:href="@{/delete/{id}(id=${contact.id})}"
                        class="btn btn-danger btn-sm me-3">Delete</a>
                 </div>
             </td>
@@ -50,7 +50,7 @@
         </tbody>
     </table>
         <div th:with="basePath='/birthday'">
-            <div th:replace="~{fragments/pagination :: pagination-section(basePath=${basePath})}"></div>
+            <div th:replace="~{fragments/pagination :: pagination-section(${contactPage}, '/contacts')}"></div>
         </div>
     <div th:replace="~{fragments/footer::footer-section}"></div>
 </div>
