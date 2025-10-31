@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class ContactServiceImpl implements ContactService {
@@ -29,6 +30,11 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public Contact getContactById(Long id) {
+        return contactRepo.findById(id).orElseThrow(() -> new RuntimeException("Contact not found"));
+    }
+
+    @Override
     public Page<Contact> getBirthdayContacts(int pageNumber, int pageSize){
 
         int nextMonth = (LocalDate.now().getMonthValue() % 12) + 1;
@@ -37,9 +43,9 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Contact findContactById(Integer contactId) {
+    public Optional<Contact> findById(Long contactId) {
 
-        return contactRepo.findById(contactId).orElse(null);
+        return Optional.of(contactRepo.findById(contactId).orElseThrow(() -> new RuntimeException("Contact not found")));
 
         //TODO: create exception
 

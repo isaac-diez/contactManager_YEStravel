@@ -3,15 +3,17 @@ package com.yestravel.contactsmanager.service;
 import com.yestravel.contactsmanager.model.Contact;
 import org.springframework.data.domain.Page;
 
-public interface ContactService {
+import java.util.Optional;
 
-//    public List<Contact> listContact();
+public interface ContactService {
 
     public Page<Contact> getContacts(int pageNumber, int pageSize);
 
+    public Contact getContactById(Long id);
+
     public Page<Contact> getBirthdayContacts(int pageNumber, int pageSize);
 
-    public Contact findContactById(Integer contactId);
+    public Optional<Contact> findById(Long id);
 
     public void saveContact(Contact contact);
 
