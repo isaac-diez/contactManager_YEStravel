@@ -12,8 +12,8 @@
         </div>
 
         <div class="container">
-            <form action="/edit" th:object="${contactToEdit}" method="post">
-                <input type="hidden" th:field="*{idContact}"/>
+            <form action="/contacts/edit" th:object="${contactToEdit}" method="post">
+                <input type="hidden" th:field="*{id}"/>
                 <div class="row g-2">
                     <div class="col-md">
                         <div class="form-floating mb-3">
@@ -63,7 +63,7 @@
 
                 <div class="text-center">
                     <button type="submit" class="btn btn-warning me-3">Update contact</button>
-                    <a href="/" class="btn btn-danger">Go back</a>
+                    <a href="/contacts" class="btn btn-danger">Go back</a>
                 </div>
 
             </form>
