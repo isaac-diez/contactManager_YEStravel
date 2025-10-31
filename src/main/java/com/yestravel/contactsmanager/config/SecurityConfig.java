@@ -33,13 +33,26 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/auth/**",
                                 "/login",
-                                "/register",
                                 "/css/**",
                                 "/js/**")
                         .permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+
+                        .requestMatchers("/admin/**", "/register").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/contacts/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/contacts", true)
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("jwtToken")
+                        .permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)                .build();
     }
