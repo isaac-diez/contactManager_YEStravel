@@ -31,13 +31,14 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/auth/**",
+                                "/auth/login",
                                 "/login",
                                 "/css/**",
                                 "/js/**")
                         .permitAll()
 
-                        .requestMatchers("/admin/**", "/register").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/auth/register", "/register").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/contacts/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
