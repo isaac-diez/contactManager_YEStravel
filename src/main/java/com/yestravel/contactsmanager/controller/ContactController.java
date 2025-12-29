@@ -3,15 +3,19 @@ package com.yestravel.contactsmanager.controller;
 import com.yestravel.contactsmanager.model.Contact;
 import com.yestravel.contactsmanager.model.Interaction;
 import com.yestravel.contactsmanager.model.InteractionType;
+import com.yestravel.contactsmanager.service.ContactImportService;
 import com.yestravel.contactsmanager.service.ContactService;
 import com.yestravel.contactsmanager.service.InteractionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -23,10 +27,12 @@ public class ContactController {
 
     private final ContactService contactService;
     private final InteractionService interactionService;
+    private final ContactImportService contactImportService;
 
-    public ContactController(ContactService contactService, InteractionService interactionService) {
+    public ContactController(ContactService contactService, InteractionService interactionService, ContactImportService contactImportService) {
         this.contactService = contactService;
         this.interactionService = interactionService;
+        this.contactImportService = contactImportService;
     }
 
     @GetMapping({"/", ""})
@@ -117,6 +123,22 @@ public class ContactController {
         model.addAttribute("contactPage", birthdayContactPage);
         return "birthday"; //birthday.html
 
+    }
+
+    @PostMapping("/import")
+    @ResponseBody
+    public ResponseEntity<String> importFile(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Please, select a file.");
+        }
+
+        try {
+            contactImportService.importContacts(file);
+            return ResponseEntity.ok("Import finished successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error processing file: " + e.getMessage());
+        }
     }
 
 }
