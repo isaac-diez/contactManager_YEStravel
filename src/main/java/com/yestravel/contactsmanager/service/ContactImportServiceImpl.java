@@ -26,6 +26,16 @@ public class ContactImportServiceImpl implements ContactImportService {
     @Override
     @Transactional
     public void importContacts(MultipartFile file) throws IOException {
+
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty");
+        }
+
+        String fileName = file.getOriginalFilename();
+        if (fileName == null || !fileName.toLowerCase().endsWith(".csv")) {
+            throw new IllegalArgumentException("Only CSV files are allowed");
+        }
+
         CsvMapper mapper = new CsvMapper();
         mapper.registerModule(new JavaTimeModule());
 
