@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div th:fragment="footer-section" th:remove="tag">
-    <button type="button" class="btn btn-success ms-2"
+    <button type="button" class="btn btn-success ms-2" sec:authorize="hasAuthority('ROLE_ADMIN')"
             data-bs-toggle="modal"
             data-bs-target="#importModal">
         <i class="bi bi-file-earmark-arrow-up"></i> Import CSV
