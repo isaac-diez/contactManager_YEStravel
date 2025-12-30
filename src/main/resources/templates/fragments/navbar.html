@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <div th:fragment="navbar-section" th:remove="tag">
     <div class="container">
@@ -20,8 +20,8 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/contacts/birthday">Upcoming Birthdays</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        <li class="nav-item" sec:authorize="hasAuthority('ROLE_ADMIN')">
+                            <a class="nav-link" th:href="@{/register}">Register User</a>
                         </li>
                     </ul>
                 </div>
