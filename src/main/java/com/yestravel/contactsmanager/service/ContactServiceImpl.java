@@ -52,9 +52,9 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public void saveContact(Contact contact) {
+    public Contact saveContact(Contact contact) {
 
-        contactRepo.save(contact);
+        return contactRepo.save(contact);
 
     }
 

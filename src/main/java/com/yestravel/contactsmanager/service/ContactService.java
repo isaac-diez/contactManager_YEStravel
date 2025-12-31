@@ -15,7 +15,7 @@ public interface ContactService {
 
     public Optional<Contact> findById(Long id);
 
-    public void saveContact(Contact contact);
+    Contact saveContact(Contact contact);
 
     public void deleteContact(Contact contact);
 
