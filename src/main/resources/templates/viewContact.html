@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/header::header-section(title='Contact: ' + ${contact.firstNameEng} + ' ' + ${contact.familyNameEng})}"></head>
 
 <body>
@@ -109,9 +109,13 @@
                 </tr>
                 </tbody>
             </table>
-                <div th:with="basePath='/interactions'">
-                    <div th:replace="fragments/pagination :: pagination-section(${interactionPage}, '/contacts/view/' + ${contact.id})"></div>
-                </div>
+
+            <div th:if="${interactionPage.totalElements > 0}" th:with="basePath='/interactions'">
+                <div th:replace="~{fragments/pagination :: pagination-section(${interactionPage}, '/contacts/view/' + ${contact.id})}"></div>
+            </div>
+            <div th:if="${interactionPage.totalElements == 0}" class="text-center text-muted my-3">
+                <p>No interactions recorded yet.</p>
+            </div>
 
             <div class="text-end mb-3">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newInteractionModal">
@@ -157,56 +161,47 @@
             <a href="/contacts" class="btn btn-secondary">Go back</a>
         </div>
 
-        <script th:inline="javascript">
-            const contactId = /*[[${contact.id}]]*/ 0;
-            const username = /*[[${username}]]*/ 0; // adjust depending on how you expose user info
-
-            document.getElementById("createInteractionBtn").addEventListener("click", async () => {
-                const type = document.getElementById("type").value;
-                const description = document.getElementById("description").value;
-
-                const newInteraction = { contactId, username, type, description };
-
-                const response = await fetch("/interactions/add", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(newInteraction)
-                });
-
-                if (response.ok) {
-                    const interaction = await response.json();
-
-                    const dateObj = new Date(interaction.date);
-
-                    const pad = n => n.toString().padStart(2, '0');
-                    const formattedDate = `${dateObj.getFullYear()}-${pad(dateObj.getMonth() + 1)}-${pad(dateObj.getDate())} ${pad(dateObj.getHours())}:${pad(dateObj.getMinutes())}`;
-
-                    const tbody = document.querySelector("tbody");
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <th>${interaction.id}</th>
-                        <td>${interaction.type}</td>
-                        <td>${formattedDate}</td>
-                        <td>${interaction.description}</td>
-                        <td>${username}</td>
-                    `;
-                    tbody.appendChild(row);
-
-
-                    document.getElementById("newInteractionForm").reset();
-                    const modal = bootstrap.Modal.getInstance(document.getElementById("newInteractionModal"));
-                    modal.hide();
-                } else {
-                    alert("Error creating interaction");
-                }
-            });
-        </script>
-
-
-
         <div th:replace="~{fragments/footer::footer-section}"></div>
 
-        </div>
+        <script th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                const contactId = [[${contact.id}]];
+                const username = [[${#authentication.name}]];
+
+                const createBtn = document.getElementById("createInteractionBtn");
+                const modalElement = document.getElementById("newInteractionModal");
+
+                const bModal = new bootstrap.Modal(modalElement);
+
+                createBtn.addEventListener("click", async () => {
+                    const type = document.getElementById("type").value;
+                    const description = document.getElementById("description").value;
+
+                    if(!description) {
+                        alert("Please enter a description");
+                        return;
+                    }
+
+                    const newInteraction = { contactId, username, type, description };
+
+                    try {
+                        const response = await fetch("/interactions/add", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(newInteraction)
+                        });
+
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            alert("Error creating interaction");
+                        }
+                    } catch (error) {
+                        console.error("Fetch error:", error);
+                    }
+                });
+            });
+        </script>
     </div>
 </body>
 </html>
