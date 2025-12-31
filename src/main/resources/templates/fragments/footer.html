@@ -1,12 +1,47 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<div th:fragment="footer-section" th:remove="tag">
-    <button type="button" class="btn btn-success ms-2" sec:authorize="hasAuthority('ROLE_ADMIN')"
-            data-bs-toggle="modal"
-            data-bs-target="#importModal">
-        <i class="bi bi-file-earmark-arrow-up"></i> Import CSV
-    </button>
+<body>
+<div th:fragment="footer-section">
+
+    <div class="container mb-5 mt-4"> <div class="d-flex justify-content-start pt-3">
+
+        <div sec:authorize="hasAuthority('ROLE_ADMIN')">
+            <button type="button" class="btn btn-info me-2" data-bs-toggle="modal" data-bs-target="#importModal">
+                <i class="bi bi-file-earmark-arrow-up"></i> Import CSV
+            </button>
+        </div>
+
+        <div sec:authorize="hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')">
+            <a th:href="@{/contacts/add}" class="btn btn-success">
+                <i class="bi bi-person-add"></i> Add Contact
+            </a>
+        </div>
+    </div>
+    </div>
+
+    <style>
+        .sticky-copyright {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            padding: 10px 0;
+            z-index: 1030;
+        }
+        body {
+            padding-bottom: 60px;
+        }
+    </style>
+
+    <footer class="sticky-copyright">
+        <div class="container text-start">
+                <span class="text-muted small">
+                    © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> YEStravel. All rights reserved.
+                </span>
+        </div>
+    </footer>
 
 </div>
-
+</body>
 </html>

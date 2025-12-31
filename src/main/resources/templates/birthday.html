@@ -5,7 +5,7 @@
 <div class="container">
 
     <!--    Navbar menu -->
-<div th:replace="~{fragments/navbar::navbar-section}"></div>
+    <div th:replace="~{fragments/navbar::navbar-section}"></div>
 
     <!--  Div para desplegar tabla  -->
     <div class="container text-center" style="margin: 30px">
@@ -52,8 +52,10 @@
         <div th:with="basePath='/birthday'">
             <div th:replace="~{fragments/pagination :: pagination-section(${contactPage}, '/contacts')}"></div>
         </div>
-    <div th:replace="~{fragments/footer::footer-section}"></div>
+    </div>
 </div>
+
+<div th:replace="~{fragments/footer::footer-section}"></div>
 
 </body>
 </html>
