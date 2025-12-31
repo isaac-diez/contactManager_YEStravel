@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="pagination-section (pageObj, basePath)" th:remove="tag">
 
-    <ul class="pagination">
+    <ul class="pagination" th:if="${pageObj.totalPages > 1}">
 
         <!-- First -->
         <li class="page-item" th:if="${pageObj.number > 0}">
