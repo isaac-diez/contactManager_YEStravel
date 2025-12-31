@@ -48,15 +48,16 @@ public class ContactController {
     }
 
     @GetMapping("/add")
-    public String showAdd(){
-        return "add"; //add.html
+    public String showAdd(Model model){
+        model.addAttribute("contact", new Contact());
+        return "add";
     }
 
     @PostMapping("/add")
-    public String addContact(@ModelAttribute("contactForm") Contact contactForm){
+    public String addContact(@ModelAttribute("contact") Contact contactForm){
         logger.info("Contact to add: " + contactForm);
-        contactService.saveContact(contactForm);
-        return "redirect:/"; //redirect controller to path "/"
+        Contact savedContact = contactService.saveContact(contactForm);
+        return "redirect:/contacts/view/" + savedContact.getId();
     }
 
     @GetMapping("/view/{id}")
