@@ -161,47 +161,49 @@
             <a href="/contacts" class="btn btn-secondary">Go back</a>
         </div>
 
-        <div th:replace="~{fragments/footer::footer-section}"></div>
-
-        <script th:inline="javascript">
-            document.addEventListener('DOMContentLoaded', function() {
-                const contactId = [[${contact.id}]];
-                const username = [[${#authentication.name}]];
-
-                const createBtn = document.getElementById("createInteractionBtn");
-                const modalElement = document.getElementById("newInteractionModal");
-
-                const bModal = new bootstrap.Modal(modalElement);
-
-                createBtn.addEventListener("click", async () => {
-                    const type = document.getElementById("type").value;
-                    const description = document.getElementById("description").value;
-
-                    if(!description) {
-                        alert("Please enter a description");
-                        return;
-                    }
-
-                    const newInteraction = { contactId, username, type, description };
-
-                    try {
-                        const response = await fetch("/interactions/add", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(newInteraction)
-                        });
-
-                        if (response.ok) {
-                            window.location.reload();
-                        } else {
-                            alert("Error creating interaction");
-                        }
-                    } catch (error) {
-                        console.error("Fetch error:", error);
-                    }
-                });
-            });
-        </script>
     </div>
+
+    <div th:replace="~{fragments/footer::footer-section}"></div>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactId = [[${contact.id}]];
+            const username = [[${#authentication.name}]];
+
+            const createBtn = document.getElementById("createInteractionBtn");
+            const modalElement = document.getElementById("newInteractionModal");
+
+            const bModal = new bootstrap.Modal(modalElement);
+
+            createBtn.addEventListener("click", async () => {
+                const type = document.getElementById("type").value;
+                const description = document.getElementById("description").value;
+
+                if(!description) {
+                    alert("Please enter a description");
+                    return;
+                }
+
+                const newInteraction = { contactId, username, type, description };
+
+                try {
+                    const response = await fetch("/interactions/add", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(newInteraction)
+                    });
+
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert("Error creating interaction");
+                    }
+                } catch (error) {
+                    console.error("Fetch error:", error);
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
