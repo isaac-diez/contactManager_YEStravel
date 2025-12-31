@@ -6,11 +6,6 @@ target/
 src/main/resources/application.properties
 src/main/resources/application-*.properties
 
-### Spring profiles ###
-application.properties
-application-dev.properties
-application-pro.properties
-
 ### STS ###
 .apt_generated
 .classpath
