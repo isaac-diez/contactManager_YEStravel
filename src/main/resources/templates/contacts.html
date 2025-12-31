@@ -5,7 +5,7 @@
 <div class="container">
 
     <!--    Navbar menu -->
-<div th:replace="~{fragments/navbar::navbar-section}"></div>
+    <div th:replace="~{fragments/navbar::navbar-section}"></div>
 
     <!--  Div for table  -->
     <div class="container text-center" style="margin: 30px">
@@ -54,8 +54,9 @@
             <div th:replace="~{fragments/pagination :: pagination-section(${contactPage}, '/contacts')}"></div>
             </div>
     </div>
-    <div th:replace="~{fragments/footer::footer-section}"></div>
 </div>
+
+<div th:replace="~{fragments/footer::footer-section}"></div>
 
 <div class="modal fade" id="importModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
