@@ -25,6 +25,7 @@ application-pro.properties
 *.iws
 *.iml
 *.ipr
+*~
 
 ### NetBeans ###
 /nbproject/private/
