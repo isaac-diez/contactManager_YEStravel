@@ -36,10 +36,8 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Page<Contact> getBirthdayContacts(int pageNumber, int pageSize){
-
-        int nextMonth = (LocalDate.now().getMonthValue() % 12) + 1;
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("birthDate"));
-        return contactRepo.findByBirthDateMonth(nextMonth, pageRequest);
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        return contactRepo.findUpcomingBirthdays(pageRequest);
     }
 
     @Override
