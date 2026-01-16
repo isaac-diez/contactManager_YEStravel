@@ -12,7 +12,10 @@ public interface ContactRepo extends JpaRepository<Contact, Long> {
     @Override
     Page<Contact> findAll(Pageable pageable);
 
-    @Query("SELECT c FROM Contact c " +
-            "WHERE FUNCTION('MONTH', c.birthDate) = :month")
-    Page<Contact> findByBirthDateMonth(@Param("month") int month, Pageable pageable);
+    @Query(value = "SELECT * FROM contacts c WHERE " +
+            "DAYOFYEAR(c.birth_date) >= DAYOFYEAR(CURDATE() + INTERVAL 1 DAY) " +
+            "ORDER BY MONTH(c.birth_date) ASC, DAY(c.birth_date) ASC, c.id ASC",
+            countQuery = "SELECT count(*) FROM contacts WHERE DAYOFYEAR(birth_date) >= DAYOFYEAR(CURDATE() + INTERVAL 1 DAY)",
+            nativeQuery = true)
+    Page<Contact> findUpcomingBirthdays(Pageable pageable);
 }
