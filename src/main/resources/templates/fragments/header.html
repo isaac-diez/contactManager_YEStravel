@@ -26,6 +26,25 @@
             max-width: 120px;
             margin-bottom: 25px;
         }
+
+        .btn-delete-confirm {
+            transition: all 0.3s ease;
+            min-width: 220px;
+        }
+
+        .btn-delete-confirm:hover strong {
+            display: none;
+        }
+
+        .btn-delete-confirm:hover::after {
+            content: attr(data-hover-text); /* Muestra el texto del atributo data */
+            font-weight: bold;
+        }
+
+        .btn-delete-confirm:hover {
+            background-color: #dc3545;
+            color: white;
+        }
     </style>
 </head>
 </html>
