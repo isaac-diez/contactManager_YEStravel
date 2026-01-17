@@ -1,76 +1,87 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header::header-section(title='Edit Contact')}"></head>
-<body>
-    <div class="container">
+<body class="bg-light">
 
-        <!--    Navbar menu -->
-        <div th:replace="~{fragments/navbar::navbar-section}"></div>
+<div th:replace="~{fragments/navbar::navbar-section}"></div>
 
-        <div class="container text-center" style="margin: 30px">
-            <h3>Edit contact</h3>
+<div class="container-md px-0 px-md-3">
+    <div class="row mb-4 pt-5 mx-0 px-3 px-md-0">
+        <div class="col-12 text-center">
+            <h1 class="display-5 fw-bold text-primary">
+                <i class="bi bi-person-gear"></i> Edit contact
+            </h1>
         </div>
+    </div>
 
-        <div class="container">
-            <form action="/contacts/edit" th:object="${contactToEdit}" method="post">
-                <input type="hidden" th:field="*{id}"/>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="firstNameEng" name="firstNameEng" required="true" th:field="*{firstNameEng}" aria-describedby="firstNameEngDiv">
-                            <label for="firstNameEng" class="form-label">Name</label>
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="familyNameEng" name="familyNameEng" required="true"
-                                   th:field="*{familyNameEng}" aria-describedby="familyNameEngDiv">
-                            <label for="familyNameEng" class="form-label">Family Name</label>
-                        </div>
-                    </div>
+    <form class="px-3 px-md-0" action="/contacts/edit" th:object="${contactToEdit}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="row g-2">
+            <div class="col-md">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="firstNameEng" name="firstNameEng" required="true"
+                           th:field="*{firstNameEng}" aria-describedby="firstNameEngDiv">
+                    <label for="firstNameEng" class="form-label">Name</label>
                 </div>
-                <div class="row g-2">
-                    <div class="col-md">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="firstNameCh" name="firstNameCh"
-                                   th:field="*{firstNameCh}" aria-describedby="firstNameChDiv">
-                            <label for="firstNameCh" class="form-label">姓</label>
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="familyNameCh" name="familyNameCh"
-                                   th:field="*{familyNameCh}" aria-describedby="familyNameChDiv">
-                            <label for="familyNameCh" class="form-label">名字</label>
-                        </div>
-                    </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="familyNameEng" name="familyNameEng" required="true"
+                           th:field="*{familyNameEng}" aria-describedby="familyNameEngDiv">
+                    <label for="familyNameEng" class="form-label">Family Name</label>
                 </div>
+            </div>
+        </div>
+        <div class="row g-2">
+            <div class="col-md">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="firstNameCh" name="firstNameCh"
+                           th:field="*{firstNameCh}" aria-describedby="firstNameChDiv">
+                    <label for="firstNameCh" class="form-label">姓</label>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="familyNameCh" name="familyNameCh"
+                           th:field="*{familyNameCh}" aria-describedby="familyNameChDiv">
+                    <label for="familyNameCh" class="form-label">名字</label>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-md">
                 <div class="form-floating mb-3">
                     <input type="tel" class="form-control" id="mobilePhone" name="mobilePhone" required="true"
                            th:field="*{mobilePhone}" aria-describedby="mobilePhoneDiv">
                     <label for="mobilePhone" class="form-label">Mobile Phone</label>
                 </div>
+            </div>
+            <div class="col-md">
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="email" name="email" required="true" placeholder="name@example.com"
+                    <input type="email" class="form-control" id="email" name="email" required="true"
+                           placeholder="name@example.com"
                            th:field="*{email}" aria-describedby="emailDiv">
                     <label for="email" class="form-label">Email address</label>
                 </div>
+            </div>
+            <div class="col-md">
                 <div class="form-floating mb-3">
                     <input type="date" class="form-control" id="birthDate" name="birthDate"
                            th:field="*{birthDate}" aria-describedby="birthDateDiv">
                     <label for="birthDate" class="form-label">Birthdate</label>
                 </div>
-
-                <div class="text-center">
-                    <button type="submit" class="btn btn-warning me-3">Update contact</button>
-                    <a href="/contacts" class="btn btn-danger">Go back</a>
-                </div>
-
-            </form>
+            </div>
         </div>
 
-        <!--    Footer  -->
-        <div th:replace="~{fragments/footer::footer-section}"></div>
+        <div class="text-center mt-5">
+            <button type="submit" class="btn btn-warning me-3">Update contact</button>
+            <a href="/contacts" class="btn btn-danger">Go back</a>
+        </div>
+
+    </form>
+</div>
+
+<div th:replace="~{fragments/footer::footer-section}"></div>
 
 </body>
 </html>
