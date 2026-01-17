@@ -3,7 +3,7 @@
 <body>
 <div th:fragment="footer-section">
 
-    <div class="container mb-5 mt-4"> <div class="d-flex justify-content-start pt-3">
+    <div class="container-md mb-5 mt-4"> <div class="d-flex justify-content-start pt-3">
 
         <div sec:authorize="hasAuthority('ROLE_ADMIN')">
             <button type="button" class="btn btn-info me-2" data-bs-toggle="modal" data-bs-target="#importModal">
@@ -35,7 +35,7 @@
     </style>
 
     <footer class="sticky-copyright">
-        <div class="container text-start">
+        <div class="container-md px-3 px-md-3 text-start">
                 <span class="text-muted small">
                     © <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> YEStravel. All rights reserved.
                 </span>
