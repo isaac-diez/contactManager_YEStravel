@@ -2,26 +2,18 @@ package com.yestravel.contactsmanager.service;
 
 import com.yestravel.contactsmanager.model.Contact;
 import com.yestravel.contactsmanager.repo.ContactRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.Optional;
 
 @Service
 public class ContactServiceImpl implements ContactService {
 
-    @Autowired
-    private ContactRepo contactRepo;
+    private final ContactRepo contactRepo;
 
-//    @Override
-//    public List<Contact> listContact() {
-//
-//        return contactRepo.findAll();
-
+    public ContactServiceImpl(ContactRepo contactRepo) {
+        this.contactRepo = contactRepo;
+    }
 
     @Override
     public Page<Contact> getContacts(int pageNumber, int pageSize) {
@@ -41,9 +33,9 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Optional<Contact> findById(Long contactId) {
+    public Contact findById(Long contactId) {
 
-        return Optional.of(contactRepo.findById(contactId).orElseThrow(() -> new RuntimeException("Contact not found")));
+        return contactRepo.findById(contactId).orElseThrow(() -> new RuntimeException("Contact not found"));
 
         //TODO: create exception
 

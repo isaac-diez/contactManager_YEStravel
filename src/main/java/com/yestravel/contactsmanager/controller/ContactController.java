@@ -17,8 +17,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Optional;
-
 @Controller
 @RequestMapping("/contacts")
 public class ContactController {
@@ -29,7 +27,9 @@ public class ContactController {
     private final InteractionService interactionService;
     private final ContactImportService contactImportService;
 
-    public ContactController(ContactService contactService, InteractionService interactionService, ContactImportService contactImportService) {
+    public ContactController(ContactService contactService,
+                             InteractionService interactionService,
+                             ContactImportService contactImportService) {
         this.contactService = contactService;
         this.interactionService = interactionService;
         this.contactImportService = contactImportService;
@@ -42,7 +42,7 @@ public class ContactController {
             Model model) {
 
         Page<Contact> contactPage = contactService.getContacts(page, size);
-        contactPage.forEach(contact -> logger.info(contact.toString()));
+        //contactPage.forEach(contact -> logger.info(contact.toString()));
         model.addAttribute("contactPage",contactPage);
         return "contacts"; //contacts.html
     }
@@ -66,8 +66,7 @@ public class ContactController {
             @RequestParam(defaultValue = "0") int page,
             Model model) {
 
-        Contact contact = contactService.findById(id)
-                .orElseThrow(() -> new RuntimeException("Contact not found"));
+        Contact contact = contactService.findById(id);
 
         Page<Interaction> interactionPage = interactionService.findByContactId(id, page, 5);
 
@@ -85,7 +84,7 @@ public class ContactController {
 
     @GetMapping("/edit/{id}")
     public String showEdit(@PathVariable(value="id") Long idContact, ModelMap model){
-        Optional<Contact> contact = contactService.findById(idContact);
+        Contact contact = contactService.findById(idContact);
         logger.info("Contact to edit: " + contact);
         model.put("contactToEdit", contact);
         return "edit"; //edit.html
@@ -95,12 +94,12 @@ public class ContactController {
     public String editContact(@ModelAttribute("contactToEdit") Contact contact) {
         logger.info("Contact updated: " + contact);
         contactService.saveContact(contact);
-        return "redirect:/"; //redirect controller to path "/"
+        return "edit"; //redirect controller to path "/"
     }
 
     @GetMapping("/delete/{id}")
     public String showDelete(@PathVariable(value="id") Long idContact, ModelMap model){
-        Optional<Contact> contact = contactService.findById(idContact);
+        Contact contact = contactService.findById(idContact);
         logger.info("Contact to delete: " + contact);
         model.put("contactToDelete", contact);
         return "delete"; //delete.html

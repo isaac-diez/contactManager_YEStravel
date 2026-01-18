@@ -13,7 +13,7 @@ public interface ContactService {
 
     public Page<Contact> getBirthdayContacts(int pageNumber, int pageSize);
 
-    public Optional<Contact> findById(Long id);
+    public Contact findById(Long id);
 
     Contact saveContact(Contact contact);
 
