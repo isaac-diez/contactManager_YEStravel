@@ -7,7 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule; // ¡Nuevo!
 import com.yestravel.contactsmanager.model.Contact;
 import com.yestravel.contactsmanager.repo.ContactRepo;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +19,11 @@ import java.util.List;
 @Service
 public class ContactImportServiceImpl implements ContactImportService {
 
-    @Autowired
-    private ContactRepo contactRepo;
+    private final ContactRepo contactRepo;
+
+    public ContactImportServiceImpl(ContactRepo contactRepo) {
+        this.contactRepo = contactRepo;
+    }
 
     @Override
     @Transactional
