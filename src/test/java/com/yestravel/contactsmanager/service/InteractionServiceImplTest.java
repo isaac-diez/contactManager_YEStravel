@@ -2,6 +2,7 @@ package com.yestravel.contactsmanager.service;
 
 import com.yestravel.contactsmanager.model.*;
 import com.yestravel.contactsmanager.repo.InteractionRepo;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,32 +26,49 @@ class InteractionServiceImplTest {
     @Mock
     private InteractionRepo interactionRepo;
 
+    @Mock
+    private EntityManager entityManager;
+
     @InjectMocks
     private InteractionServiceImpl interactionService;
 
     private Interaction testInteraction;
-    private Contact contact1 = new Contact();
+    private Contact contactRef;
+    private User userRef;
+
 
     @BeforeEach
     void setUp() {
 
+        contactRef = new Contact();
+        contactRef.setId(2L);
+
+        userRef = new User();
+        userRef.setId(3L);
 
         testInteraction = new Interaction();
         testInteraction.setId(1L);
         testInteraction.setType(InteractionType.CALL);
         testInteraction.setDate(LocalDateTime.now());
         testInteraction.setDescription("Test interaction");
-        testInteraction.setContact(contact1);
-        testInteraction.setUser(new User());
+        testInteraction.setContact(contactRef);
+        testInteraction.setUser(userRef);
     }
 
     @Test
     void CreateNewInteraction_shouldSaveAndReturnInteraction_whenValid() {
+
+
+        when(entityManager.getReference(Contact.class,2L)).thenReturn(contactRef);
+        when(entityManager.getReference(User.class,3L)).thenReturn(userRef);
+
         when(interactionRepo.save(testInteraction)).thenReturn(testInteraction);
 
-        interactionService.createInteraction(testInteraction);
+        Interaction result = interactionService.createInteraction(testInteraction);
 
+        assertNotNull(result);
         verify(interactionRepo, times(1)).save(testInteraction);
+        verify(entityManager,times(2)).getReference(any(), any());
         assertEquals(InteractionType.CALL, testInteraction.getType());
     }
 
@@ -86,7 +104,8 @@ class InteractionServiceImplTest {
         Interaction testInteraction2 = new Interaction();
         testInteraction2.setId(2L);
         testInteraction2.setType(InteractionType.EMAIL);
-        testInteraction2.setContact(contact1);
+        testInteraction2.setContact(contactRef);
+        testInteraction2.setUser(userRef);
 
         when(interactionRepo.save(testInteraction)).thenReturn(testInteraction);
         when(interactionRepo.save(testInteraction2)).thenReturn(testInteraction2);
@@ -118,20 +137,25 @@ class InteractionServiceImplTest {
         Interaction interaction1 = new Interaction();
         interaction1.setId(1L);
         interaction1.setType(InteractionType.CALL);
-        interaction1.setContact(contact1);
+        interaction1.setContact(contactA);
+        interaction1.setUser(userRef);
 
         Interaction interaction2 = new Interaction();
         interaction2.setId(2L);
         interaction2.setType(InteractionType.EMAIL);
-        interaction2.setContact(contact1);
+        interaction2.setContact(contactA);
+        interaction2.setUser(userRef);
 
         Interaction interaction3 = new Interaction();
         interaction3.setId(3L);
         interaction3.setType(InteractionType.MEETING);
         interaction3.setContact(contactB);
+        interaction3.setUser(userRef);
 
         PageRequest pageRequest = PageRequest.of(0, 10);
-        Page<Interaction> mockPage = new PageImpl<>(List.of(interaction1, interaction2), pageRequest, 2);
+        Page<Interaction> mockPage = new PageImpl<>(List.of(
+                interaction1,
+                interaction2), pageRequest, 3);
 
         when(interactionRepo.findAllInteractionsByContact_Id(1L, pageRequest))
                 .thenReturn(mockPage);
