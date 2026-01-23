@@ -22,14 +22,14 @@ public class InteractionServiceImpl implements InteractionService{
     private final InteractionRepo interactionRepo;
     private final ContactRepo contactRepo;
     private final UserRepo userRepo;
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public InteractionServiceImpl(
+            EntityManager entityManager,
             InteractionRepo interactionRepo,
             ContactRepo contactRepo,
             UserRepo userRepo) {
+        this.entityManager= entityManager;
         this.interactionRepo = interactionRepo;
         this.contactRepo = contactRepo;
         this.userRepo = userRepo;
