@@ -29,9 +29,6 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @Column(name = "birthdayReminder", nullable = false)
-    private boolean birthdayReminder = true;
-
 //    In the future, if I need one user to have more than one role:
 //    @ElementCollection(fetch = FetchType.EAGER)
 //    @Enumerated(EnumType.STRING)
