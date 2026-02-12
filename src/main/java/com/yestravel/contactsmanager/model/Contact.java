@@ -27,6 +27,7 @@ public class Contact {
     private String firstNameCh;
     private String mobilePhone;
     private String email;
+    private boolean birthdayReminder = true;
 
     @Column(name = "birth_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
