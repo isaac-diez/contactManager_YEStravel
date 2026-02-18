@@ -1,7 +1,9 @@
 package com.yestravel.contactsmanager.service;
 
 import com.yestravel.contactsmanager.model.Contact;
+import com.yestravel.contactsmanager.model.User;
 import com.yestravel.contactsmanager.repo.ContactRepo;
+import com.yestravel.contactsmanager.repo.UserRepo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,8 +27,14 @@ class ContactServiceImplTest {
     @Mock
     private ContactRepo contactRepo;
 
+    @Mock
+    private UserRepo userRepo;
+
     @InjectMocks
     private ContactServiceImpl contactService;
+
+    @InjectMocks
+    private UserService userService;
 
     @Test
     void getContacts() {
@@ -130,9 +138,13 @@ class ContactServiceImplTest {
         savedContact.setMobilePhone("123456789");
         savedContact.setBirthDate(LocalDate.of(2000, 12, 19));
 
-        when(contactRepo.save(any(Contact.class))).thenReturn(savedContact);
+        User testUser = new User();
+        testUser.setUsername("testUser");
 
-        Contact result = contactService.saveContact(newContact);
+        when(contactRepo.save(any(Contact.class))).thenReturn(savedContact);
+        when(userRepo.findByUsername(any(String.class))).thenReturn(Optional.of(testUser));
+
+        Contact result = contactService.saveContact(newContact, testUser.getUsername());
 
         assertNotNull(result);
         assertEquals(50L, result.getId());
@@ -142,8 +154,6 @@ class ContactServiceImplTest {
         assertEquals(savedContact.getBirthDate(), result.getBirthDate());
 
         verify(contactRepo, times(1)).save(newContact);
-
-
     }
 
     @Test
@@ -155,7 +165,5 @@ class ContactServiceImplTest {
         contactService.deleteContact(newContact);
 
         verify(contactRepo, times(1)).delete(newContact);
-
-
     }
 }
