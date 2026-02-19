@@ -129,13 +129,13 @@ public class ContactController {
 
     @PostMapping("/import")
     @ResponseBody
-    public ResponseEntity<String> importFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> importFile(@RequestParam("file") MultipartFile file, Principal principal) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Please, select a file.");
         }
 
         try {
-            contactImportService.importContacts(file);
+            contactImportService.importContacts(file, principal.getName());
             return ResponseEntity.ok("Import finished successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

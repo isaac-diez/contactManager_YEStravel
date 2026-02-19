@@ -1,7 +1,10 @@
 package com.yestravel.contactsmanager.service;
 
 import com.yestravel.contactsmanager.model.Contact;
+import com.yestravel.contactsmanager.model.Role;
+import com.yestravel.contactsmanager.model.User;
 import com.yestravel.contactsmanager.repo.ContactRepo;
+import com.yestravel.contactsmanager.repo.UserRepo;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,9 +31,19 @@ class ContactImportServiceImplIntegrationTest {
     @Autowired
     private ContactRepo contactRepo;
 
+    @Autowired
+    private UserRepo userRepo;
+
     @Test
     @DisplayName("Integration: Should persist CSV data into H2 Database")
     void importContacts_DatabaseIntegration() throws IOException {
+
+        User testUser = new User();
+        testUser.setUsername("testUser");
+        testUser.setEmail("testUser@email.com");
+        testUser.setRole(Role.ROLE_USER);
+        testUser.setPassword("12345678");
+
         // 1. Arrange: Leemos el archivo físico de resources
         ClassPathResource res = new ClassPathResource("test-ContactsForIntegrationTest.csv");
         MockMultipartFile file = new MockMultipartFile(
@@ -39,7 +52,8 @@ class ContactImportServiceImplIntegrationTest {
         long countBefore = contactRepo.count();
 
         // 2. Act
-        contactService.importContacts(file);
+        userRepo.save(testUser);
+        contactService.importContacts(file, "testUser");
 
         contactRepo.findAll().forEach(c ->
                 System.out.println("Saved contact: " + c.getFirstNameEng() + " - " + c.getEmail())
