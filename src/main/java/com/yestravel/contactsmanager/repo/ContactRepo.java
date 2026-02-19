@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface ContactRepo extends JpaRepository<Contact, Long> {
 
     @Override
@@ -18,4 +20,13 @@ public interface ContactRepo extends JpaRepository<Contact, Long> {
             countQuery = "SELECT count(*) FROM contacts WHERE DAYOFYEAR(birth_date) >= DAYOFYEAR(CURDATE() + INTERVAL 1 DAY)",
             nativeQuery = true)
     Page<Contact> findUpcomingBirthdays(Pageable pageable);
+
+    @Query(value = "SELECT * FROM contacts WHERE birthday_reminder = true " +
+            "AND MONTH(birth_date) = :month " +
+            "AND DAY(birth_date) = :day",
+            nativeQuery = true)
+    List<Contact> findBirthdayReminderAndMonthAndDay(
+            @Param("month") int month,
+            @Param("day") int day
+    );
 }

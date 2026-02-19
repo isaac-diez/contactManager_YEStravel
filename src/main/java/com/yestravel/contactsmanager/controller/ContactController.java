@@ -17,6 +17,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/contacts")
 public class ContactController {
@@ -54,9 +56,9 @@ public class ContactController {
     }
 
     @PostMapping("/add")
-    public String addContact(@ModelAttribute("contact") Contact contactForm){
+    public String addContact(@ModelAttribute("contact") Contact contactForm, Principal principal){
         logger.info("Contact to add: " + contactForm);
-        Contact savedContact = contactService.saveContact(contactForm);
+        Contact savedContact = contactService.saveContact(contactForm, principal.getName());
         return "redirect:/contacts/view/" + savedContact.getId();
     }
 
@@ -91,9 +93,9 @@ public class ContactController {
     }
 
     @PostMapping("/edit")
-    public String editContact(@ModelAttribute("contactToEdit") Contact contact) {
+    public String editContact(@ModelAttribute("contactToEdit") Contact contact, Principal principal) {
         logger.info("Contact updated: " + contact);
-        contactService.saveContact(contact);
+        contactService.saveContact(contact, principal.getName());
         return "edit"; //redirect controller to path "/"
     }
 
@@ -127,13 +129,13 @@ public class ContactController {
 
     @PostMapping("/import")
     @ResponseBody
-    public ResponseEntity<String> importFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> importFile(@RequestParam("file") MultipartFile file, Principal principal) {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Please, select a file.");
         }
 
         try {
-            contactImportService.importContacts(file);
+            contactImportService.importContacts(file, principal.getName());
             return ResponseEntity.ok("Import finished successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

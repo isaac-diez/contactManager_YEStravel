@@ -1,18 +1,23 @@
 package com.yestravel.contactsmanager.service;
 
 import com.yestravel.contactsmanager.model.Contact;
+import com.yestravel.contactsmanager.model.User;
 import com.yestravel.contactsmanager.repo.ContactRepo;
+import com.yestravel.contactsmanager.repo.UserRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ContactServiceImpl implements ContactService {
 
     private final ContactRepo contactRepo;
+    private final UserRepo userRepo;
 
-    public ContactServiceImpl(ContactRepo contactRepo) {
+    public ContactServiceImpl(ContactRepo contactRepo, UserRepo userRepo) {
         this.contactRepo = contactRepo;
+        this.userRepo = userRepo;
     }
 
     @Override
@@ -42,8 +47,11 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Contact saveContact(Contact contact) {
+    public Contact saveContact(Contact contact, String userName) throws UsernameNotFoundException {
 
+        User user = userRepo.findByUsername(userName)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + userName));
+        contact.setUser(user);
         return contactRepo.save(contact);
 
     }
