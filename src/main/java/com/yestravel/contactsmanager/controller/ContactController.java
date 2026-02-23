@@ -1,11 +1,15 @@
 package com.yestravel.contactsmanager.controller;
 
+import com.yestravel.contactsmanager.dto.ContactFormDTO;
+import com.yestravel.contactsmanager.dto.UserDisplayDTO;
+import com.yestravel.contactsmanager.mapping.ContactMapperImpl;
 import com.yestravel.contactsmanager.model.Contact;
 import com.yestravel.contactsmanager.model.Interaction;
 import com.yestravel.contactsmanager.model.InteractionType;
 import com.yestravel.contactsmanager.service.ContactImportService;
 import com.yestravel.contactsmanager.service.ContactService;
 import com.yestravel.contactsmanager.service.InteractionService;
+import com.yestravel.contactsmanager.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/contacts")
@@ -26,13 +31,16 @@ public class ContactController {
     private static final Logger logger = LoggerFactory.getLogger(ContactController.class);
 
     private final ContactService contactService;
+    private final UserService userService;
     private final InteractionService interactionService;
     private final ContactImportService contactImportService;
 
     public ContactController(ContactService contactService,
+                             UserService userService,
                              InteractionService interactionService,
                              ContactImportService contactImportService) {
         this.contactService = contactService;
+        this.userService = userService;
         this.interactionService = interactionService;
         this.contactImportService = contactImportService;
     }
@@ -56,9 +64,19 @@ public class ContactController {
     }
 
     @PostMapping("/add")
-    public String addContact(@ModelAttribute("contact") Contact contactForm, Principal principal){
-        logger.info("Contact to add: " + contactForm);
-        Contact savedContact = contactService.saveContact(contactForm, principal.getName());
+    public String addContact(@ModelAttribute("contact") ContactFormDTO contactFormDto){
+        logger.info("Contact to add: " + contactFormDto);
+
+        ContactMapperImpl mapper = new ContactMapperImpl();
+        Contact newContact = mapper.toEntity(contactFormDto);
+
+        String userName = newContact.getUser().getUsername();
+
+        Contact savedContact = contactService.saveContact(
+                contactFormDto,
+                userName,
+                contactService.isAdmin(userName)
+        );
         return "redirect:/contacts/view/" + savedContact.getId();
     }
 
@@ -85,17 +103,35 @@ public class ContactController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEdit(@PathVariable(value="id") Long idContact, ModelMap model){
+    public String showEdit(@PathVariable(value="id") Long idContact, ModelMap model, Principal principal){
         Contact contact = contactService.findById(idContact);
         logger.info("Contact to edit: " + contact);
-        model.put("contactToEdit", contact);
+
+        ContactMapperImpl mapper = new ContactMapperImpl();
+        ContactFormDTO contactDTO = mapper.toDto(contact);
+
+        if (contactService.isAdmin(principal.getName())) {
+            List<UserDisplayDTO> users = userService.getAllUsersForDisplay();
+            contactDTO.setPotentialOwners(users);
+        }
+
+        model.put("contactToEdit", contactDTO);
         return "edit"; //edit.html
     }
 
     @PostMapping("/edit")
-    public String editContact(@ModelAttribute("contactToEdit") Contact contact, Principal principal) {
-        logger.info("Contact updated: " + contact);
-        contactService.saveContact(contact, principal.getName());
+    public String editContact(@ModelAttribute("contactToEdit") ContactFormDTO contactFormDTO) {
+        logger.info("Contact updated: " + contactFormDTO);
+
+        ContactMapperImpl mapper = new ContactMapperImpl();
+        Contact contact = mapper.toEntity(contactFormDTO);
+
+        String userName = contactService.getContactById(contact.getId()).getUser().getUsername();
+
+        contactService.saveContact(contactFormDTO,
+                userName,
+                contactService.isAdmin(userName));
+
         return "edit"; //redirect controller to path "/"
     }
 
