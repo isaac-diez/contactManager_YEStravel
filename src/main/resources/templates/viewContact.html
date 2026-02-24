@@ -55,9 +55,9 @@
             </div>
         </div>
 
-        <div class="row g-3">
+        <div class="row g-4">
             <div class="col-md">
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-4">
                     <input type="text" id="mobilePhone"
                            class="form-control"
                            th:value="${contact.mobilePhone}" disabled>
@@ -66,7 +66,7 @@
             </div>
 
             <div class="col-md">
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-4">
                     <input type="text" id="email"
                            class="form-control"
                            th:value="${contact.email}" disabled>
@@ -75,11 +75,29 @@
             </div>
 
             <div class="col-md">
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-4">
                     <input type="text" id="birthDate"
                            class="form-control"
                            th:value="${contact.birthDate}" disabled>
                     <label for="birthDate" class="form-label">Birthdate</label>
+                </div>
+            </div>
+            <div sec:authorize="hasAuthority('ROLE_ADMIN')" class="col-md">
+                <div class="form-floating mb-4">
+                    <input type="text" id="user"
+                            class="form-control"
+                            th:value="${contact.user.username}" disabled>
+                    <label for="user" class="form-label">Owner</label>
+                </div>
+            </div>
+        </div>
+        <div class="row g-1">
+            <div class="col-md">
+                <div class="form-group mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" th:checked="${contact.birthdayReminder}" id="remindCheck" disabled>
+                        <label class="form-check-label" for="remindCheck">Birthday Reminder</label>
+                    </div>
                 </div>
             </div>
         </div>

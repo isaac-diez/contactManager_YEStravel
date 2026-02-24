@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/header::header-section(title='Edit Contact')}"></head>
 <body class="bg-light">
 
@@ -48,16 +48,16 @@
                 </div>
             </div>
         </div>
-        <div class="row g-3">
+        <div class="row g-4">
             <div class="col-md">
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-4">
                     <input type="tel" class="form-control" id="mobilePhone" name="mobilePhone" required="true"
                            th:field="*{mobilePhone}" aria-describedby="mobilePhoneDiv">
                     <label for="mobilePhone" class="form-label">Mobile Phone</label>
                 </div>
             </div>
             <div class="col-md">
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-4">
                     <input type="email" class="form-control" id="email" name="email" required="true"
                            placeholder="name@example.com"
                            th:field="*{email}" aria-describedby="emailDiv">
@@ -65,17 +65,40 @@
                 </div>
             </div>
             <div class="col-md">
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-4">
                     <input type="date" class="form-control" id="birthDate" name="birthDate"
                            th:field="*{birthDate}" aria-describedby="birthDateDiv">
                     <label for="birthDate" class="form-label">Birthdate</label>
                 </div>
             </div>
+            <div sec:authorize="hasRole('ADMIN')" class="col-md">
+                <div class="form-floating mb-4">
+                    <select class="form-select" th:field="*{userId}" id="ownerSelect">
+                        <option value="" disabled selected>Select user...</option>
+                        <option th:each="u : *{potentialOwners}"
+                                th:value="${u.id}"
+                                th:text="${u.username}">
+                        </option>
+                    </select>
+                    <label for="ownerSelect" class="form-label">Owner</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" th:field="*{birthdayReminder}" id="remindCheck">
+                <label class="form-check-label" for="remindCheck">Birthday reminder</label>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <p>Current owner: <strong th:text="*{userName}">Nombre</strong></p>
         </div>
 
         <div class="text-center mt-5">
             <button type="submit" class="btn btn-warning me-3">Update contact</button>
-            <a href="/contacts" class="btn btn-danger">Go back</a>
+            <a th:href="@{/contacts/view/{id}(id=*{id})}" class="btn btn-danger">Go back</a>
         </div>
 
     </form>

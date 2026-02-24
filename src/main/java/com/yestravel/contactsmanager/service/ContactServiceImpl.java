@@ -1,6 +1,9 @@
 package com.yestravel.contactsmanager.service;
 
+import com.yestravel.contactsmanager.dto.ContactFormDTO;
+import com.yestravel.contactsmanager.mapping.ContactMapperImpl;
 import com.yestravel.contactsmanager.model.Contact;
+import com.yestravel.contactsmanager.model.Role;
 import com.yestravel.contactsmanager.model.User;
 import com.yestravel.contactsmanager.repo.ContactRepo;
 import com.yestravel.contactsmanager.repo.UserRepo;
@@ -14,10 +17,13 @@ public class ContactServiceImpl implements ContactService {
 
     private final ContactRepo contactRepo;
     private final UserRepo userRepo;
+    private final ContactMapperImpl contactMapper;
 
-    public ContactServiceImpl(ContactRepo contactRepo, UserRepo userRepo) {
+
+    public ContactServiceImpl(ContactRepo contactRepo, UserRepo userRepo, ContactMapperImpl contactMapper) {
         this.contactRepo = contactRepo;
         this.userRepo = userRepo;
+        this.contactMapper = contactMapper;
     }
 
     @Override
@@ -47,11 +53,20 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Contact saveContact(Contact contact, String userName) throws UsernameNotFoundException {
+    public Contact saveContact(ContactFormDTO dto, String userName, boolean isAdmin) throws UsernameNotFoundException {
 
-        User user = userRepo.findByUsername(userName)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + userName));
-        contact.setUser(user);
+        Contact contact = contactMapper.toEntity(dto);
+
+        if (isAdmin && dto.getUserId() != null) {
+            User newOwner = userRepo.findById(dto.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + dto.getUserId()));
+            contact.setUser(newOwner);
+        } else {
+            User user = userRepo.findByUsername(userName)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with name: " + userName));
+            contact.setUser(user);
+        }
+
         return contactRepo.save(contact);
 
     }
@@ -61,5 +76,12 @@ public class ContactServiceImpl implements ContactService {
 
         contactRepo.delete(contact);
 
+    }
+
+    @Override
+    public boolean isAdmin(String userName) {
+        User user = userRepo.findByUsername(userName)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + userName));
+        return user.getRole().equals(Role.ROLE_ADMIN);
     }
 }

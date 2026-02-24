@@ -1,5 +1,6 @@
 package com.yestravel.contactsmanager.service;
 
+import com.yestravel.contactsmanager.dto.UserDisplayDTO;
 import com.yestravel.contactsmanager.security.CustomUserDetails;
 import com.yestravel.contactsmanager.model.Role;
 import com.yestravel.contactsmanager.model.User;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +41,17 @@ public class UserService implements UserDetailsService {
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public List<UserDisplayDTO> getAllUsersForDisplay() {
+        return userRepository.findAll().stream()
+                .map(user -> {
+                    UserDisplayDTO dto = new UserDisplayDTO();
+                    dto.setId(user.getId());
+                    dto.setUsername(user.getUsername());
+                    return dto;
+                })
+                .toList();
     }
 }
 

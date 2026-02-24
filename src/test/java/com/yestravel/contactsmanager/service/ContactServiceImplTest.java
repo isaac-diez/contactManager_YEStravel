@@ -1,5 +1,7 @@
 package com.yestravel.contactsmanager.service;
 
+import com.yestravel.contactsmanager.dto.ContactFormDTO;
+import com.yestravel.contactsmanager.mapping.ContactMapperImpl;
 import com.yestravel.contactsmanager.model.Contact;
 import com.yestravel.contactsmanager.model.User;
 import com.yestravel.contactsmanager.repo.ContactRepo;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,6 +32,9 @@ class ContactServiceImplTest {
 
     @Mock
     private UserRepo userRepo;
+
+    @Spy // Usamos Spy con una instancia real para que el mapeo funcione de verdad
+    private ContactMapperImpl contactMapper;
 
     @InjectMocks
     private ContactServiceImpl contactService;
@@ -125,7 +131,7 @@ class ContactServiceImplTest {
 
     @Test
     void saveContact() {
-        Contact newContact = new Contact();
+        ContactFormDTO newContact = new ContactFormDTO();
         newContact.setFirstNameEng("John");
         newContact.setEmail("john@example.com");
         newContact.setMobilePhone("123456789");
@@ -144,7 +150,7 @@ class ContactServiceImplTest {
         when(contactRepo.save(any(Contact.class))).thenReturn(savedContact);
         when(userRepo.findByUsername(any(String.class))).thenReturn(Optional.of(testUser));
 
-        Contact result = contactService.saveContact(newContact, testUser.getUsername());
+        Contact result = contactService.saveContact(newContact, testUser.getUsername(), true);
 
         assertNotNull(result);
         assertEquals(50L, result.getId());
@@ -153,7 +159,6 @@ class ContactServiceImplTest {
         assertEquals(savedContact.getMobilePhone(), result.getMobilePhone());
         assertEquals(savedContact.getBirthDate(), result.getBirthDate());
 
-        verify(contactRepo, times(1)).save(newContact);
     }
 
     @Test
