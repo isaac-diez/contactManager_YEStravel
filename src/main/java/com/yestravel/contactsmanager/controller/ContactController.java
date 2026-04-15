@@ -187,4 +187,8 @@ public class ContactController {
         }
     }
 
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {return ResponseEntity.ok("OK");
+    }
+
 }
