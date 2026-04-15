@@ -8,4 +8,7 @@ public interface ContactMapper {
     ContactFormDTO toDto(Contact contact);
 
     Contact toEntity(ContactFormDTO dto);
+
+    void UpdateContactFromDto(ContactFormDTO dto, Contact contact);
+
 }

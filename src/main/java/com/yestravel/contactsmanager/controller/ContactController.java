@@ -69,7 +69,7 @@ public class ContactController {
 
     @PostMapping("/add")
     public String addContact(@ModelAttribute("contact") ContactFormDTO contactFormDto, Authentication auth) {
-        logger.info("Contact to add: " + contactFormDto);
+        logger.info("Contact sent from Form: " + contactFormDto);
 
         String currentUser = auth.getName();
 
@@ -78,6 +78,9 @@ public class ContactController {
                 currentUser,
                 contactService.isAdmin(currentUser)
         );
+
+        logger.info("Contact to add: " + savedContact);
+
         return "redirect:/contacts/view/" + savedContact.getId();
     }
 
@@ -120,18 +123,24 @@ public class ContactController {
     }
 
     @PostMapping("/edit")
-    public String editContact(@ModelAttribute("contactToEdit") ContactFormDTO contactFormDTO) {
-        logger.info("Contact updated: " + contactFormDTO);
+    public String editContact(@ModelAttribute("contactToEdit") ContactFormDTO contactFormDTO, Authentication auth) {
+        logger.info("Recibido para editar: " + contactFormDTO);
 
-        Contact contact = contactMapper.toEntity(contactFormDTO);
+        // 1. ¿Quién está intentando hacer el cambio? (El logueado)
+        String loggedInUser = auth.getName();
+        boolean loggedInUserIsAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-        String userName = contactService.getContactById(contact.getId()).getUser().getUsername();
+        // 2. Llamamos al servicio con la identidad del que ejecuta la acción
+        Contact contactSaved = contactService.saveContact(
+                contactFormDTO,
+                loggedInUser,
+                loggedInUserIsAdmin
+        );
 
-        contactService.saveContact(contactFormDTO,
-                userName,
-                contactService.isAdmin(userName));
+        logger.info("Contacto guardado con éxito. Nuevo dueño ID: " + contactSaved.getUser().getId());
 
-        return "edit"; //redirect controller to path "/"
+        return "redirect:/contacts/view/" + contactSaved.getId(); // Siempre es mejor redirigir tras un POST (Pattern Post-Redirect-Get)
     }
 
     @GetMapping("/delete/{id}")

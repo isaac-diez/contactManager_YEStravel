@@ -21,10 +21,10 @@ public interface ContactRepo extends JpaRepository<Contact, Long> {
             nativeQuery = true)
     Page<Contact> findUpcomingBirthdays(Pageable pageable);
 
-    @Query(value = "SELECT * FROM contacts WHERE birthday_reminder = true " +
-            "AND MONTH(birth_date) = :month " +
-            "AND DAY(birth_date) = :day",
-            nativeQuery = true)
+    @Query("SELECT c FROM Contact c JOIN FETCH c.user " +
+            "WHERE c.birthdayReminder = true " +
+            "AND MONTH(c.birthDate) = :month " +
+            "AND DAY(c.birthDate) = :day")
     List<Contact> findBirthdayReminderAndMonthAndDay(
             @Param("month") int month,
             @Param("day") int day

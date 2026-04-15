@@ -5,7 +5,7 @@ import com.yestravel.contactsmanager.model.Contact;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ContactMapperImpl implements ContactMapper{
+public class ContactMapperImpl implements ContactMapper {
 
     @Override
     public ContactFormDTO toDto(Contact contact) {
@@ -43,5 +43,17 @@ public class ContactMapperImpl implements ContactMapper{
         contact.setBirthdayReminder(dto.isBirthdayReminder());
 
         return contact;
+    }
+
+    @Override
+    public void UpdateContactFromDto(ContactFormDTO dto, Contact contact) {
+        contact.setFirstNameEng(dto.getFirstNameEng());
+        contact.setFamilyNameEng(dto.getFamilyNameEng());
+        contact.setFirstNameCh(dto.getFirstNameCh());
+        contact.setFamilyNameCh(dto.getFamilyNameCh());
+        contact.setEmail(dto.getEmail());
+        contact.setMobilePhone(dto.getMobilePhone());
+        contact.setBirthDate(dto.getBirthDate());
+        contact.setBirthdayReminder(dto.isBirthdayReminder());
     }
 }
