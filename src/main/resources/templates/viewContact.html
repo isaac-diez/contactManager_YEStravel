@@ -78,7 +78,7 @@
                 <div class="form-floating mb-4">
                     <input type="text" id="birthDate"
                            class="form-control"
-                           th:value="${contact.birthDate}" disabled>
+                           th:value="${#temporals.format(contact.birthDate, 'dd/MM/yyyy')}" disabled>
                     <label for="birthDate" class="form-label">Birthdate</label>
                 </div>
             </div>
