@@ -186,9 +186,4 @@ public class ContactController {
                     .body("Error processing file: " + e.getMessage());
         }
     }
-
-    @GetMapping("/health")
-    public ResponseEntity<String> healthCheck() {return ResponseEntity.ok("OK");
-    }
-
 }
