@@ -53,9 +53,17 @@ public class ContactController {
     public String listContact(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(value = "search", required = false) String search,
             Model model) {
 
-        Page<Contact> contactPage = contactService.getContacts(page, size);
+        Page<Contact> contactPage;
+        if (search != null && !search.isEmpty()) {
+            contactPage = contactService.searchContacts(search, page, size);
+            model.addAttribute("search", search);
+        } else {
+            contactPage = contactService.getContacts(page, size);
+        }
+
         //contactPage.forEach(contact -> logger.info(contact.toString()));
         model.addAttribute("contactPage",contactPage);
         return "contacts"; //contacts.html
