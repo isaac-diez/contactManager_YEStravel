@@ -44,6 +44,12 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public Page<Contact> searchContacts(String query, int pageNumber, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        return contactRepo.searchContacts(query, pageRequest);
+    }
+
+    @Override
     public Page<Contact> getBirthdayContacts(int pageNumber, int pageSize){
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
         return contactRepo.findUpcomingBirthdays(pageRequest);
