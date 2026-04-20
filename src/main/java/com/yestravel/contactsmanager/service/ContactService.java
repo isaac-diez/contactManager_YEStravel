@@ -10,6 +10,8 @@ public interface ContactService {
 
     public Contact getContactById(Long id);
 
+    Page<Contact> searchContacts(String query, int pageNumber, int pageSize);
+
     public Page<Contact> getBirthdayContacts(int pageNumber, int pageSize);
 
     public Contact findById(Long id);
