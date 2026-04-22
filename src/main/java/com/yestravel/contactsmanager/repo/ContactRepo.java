@@ -33,6 +33,8 @@ public interface ContactRepo extends JpaRepository<Contact, Long> {
     @Query("SELECT c FROM Contact c WHERE " +
             "LOWER(c.firstNameEng) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(c.familyNameEng) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(c.firstNameCh) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(c.company) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "c.mobilePhone LIKE CONCAT('%', :query, '%') OR " +
             "LOWER(c.email) LIKE LOWER(CONCAT('%', :query, '%'))")
     Page<Contact> searchContacts(@Param("query") String query, Pageable pageable);

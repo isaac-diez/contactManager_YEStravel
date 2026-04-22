@@ -1,92 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments/header::header-section(title='Add Contact')}"></head>
-<body class="bg-light">
+    <body class="bg-light">
 
-<div th:replace="~{fragments/navbar::navbar-section}"></div>
+        <div th:replace="~{fragments/navbar::navbar-section}"></div>
 
-<div class="container-md px-0 px-md-3">
+        <div class="container-md px-0 px-md-3">
 
-    <div class="row mb-4 pt-5 mx-0 px-3 px-md-0">
-        <div class="col-12 text-center">
-            <h1 class="display-5 fw-bold text-primary">
-                <i class="bi bi-person-add"></i> Add new Contact
-            </h1>
+            <div class="row mb-4 pt-5 mx-0 px-3 px-md-0">
+                <div class="col-12 text-center">
+                    <h1 class="display-5 fw-bold text-primary">
+                        <i class="bi bi-person-add"></i> Add new Contact
+                    </h1>
+                </div>
+            </div>
+
+            <form class="px-3 px-md-0" th:action="@{/contacts/add}" th:object="${contact}" method="post">
+                <div class="row g-4">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <select class="form-select" id="title" th:field="*{title}">
+                                <option value="null"></option>
+                                <option value="Mr.">Mr.</option>
+                                <option value="Ms.">Ms.</option>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                            <label for="title" class="form-label">Title</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="firstNameCh" th:field="*{firstNameCh}">
+                            <label for="firstNameCh" class="form-label">姓名</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="firstNameEng" th:field="*{firstNameEng}">
+                            <label for="firstNameEng" class="form-label">Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="familyNameEng" th:field="*{familyNameEng}">
+                            <label for="familyNameEng" class="form-label">Family Name</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="company" th:field="*{company}">
+                            <label for="company" class="form-label">Company</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="position" th:field="*{position}">
+                            <label for="position" class="form-label">Position</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="tel" class="form-control" id="mobilePhone" th:field="*{mobilePhone}" required>
+                            <label for="mobilePhone">Mobile Phone</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                            <label for="email">Email address</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control" id="birthDate" th:field="*{birthDate}">
+                            <label for="birthDate">Birthdate</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" th:field="*{birthdayReminder}" id="remindCheck">
+                        <label class="form-check-label" for="remindCheck">Birthday reminder</label>
+                    </div>
+                </div>
+
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn btn-warning me-3">Save</button>
+                    <a th:href="@{/contacts}" class="btn btn-danger">Go back</a>
+                </div>
+
+            </form>
+
         </div>
-    </div>
 
-    <form class="px-3 px-md-0" th:action="@{/contacts/add}" th:object="${contact}" method="post">
-        <div class="row g-2">
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="firstNameEng" th:field="*{firstNameEng}"
-                           required="true">
-                    <label for="firstNameEng" class="form-label">Name</label>
-                </div>
-            </div>
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="familyNameEng" th:field="*{familyNameEng}"
-                           required="true">
-                    <label for="familyNameEng" class="form-label">Family Name</label>
-                </div>
-            </div>
-        </div>
-        <div class="row g-2">
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="firstNameCh" th:field="*{firstNameCh}">
-                    <label for="firstNameCh" class="form-label">姓</label>
-                </div>
-            </div>
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="familyNameCh" th:field="*{familyNameCh}">
-                    <label for="familyNameCh" class="form-label">名字</label>
-                </div>
-            </div>
-        </div>
+        <div th:replace="~{fragments/footer::footer-section}"></div>
 
-        <div class="row g-2">
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="tel" class="form-control" id="mobilePhone" th:field="*{mobilePhone}" required>
-                    <label for="mobilePhone">Mobile Phone</label>
-                </div>
-            </div>
-
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="email" th:field="*{email}" required>
-                    <label for="email">Email address</label>
-                </div>
-            </div>
-
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="date" class="form-control" id="birthDate" th:field="*{birthDate}">
-                    <label for="birthDate">Birthdate</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group mb-3">
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" th:field="*{birthdayReminder}" id="remindCheck">
-                <label class="form-check-label" for="remindCheck">Birthday reminder</label>
-            </div>
-        </div>
-
-        <div class="text-center mt-5">
-            <button type="submit" class="btn btn-warning me-3">Save</button>
-            <a th:href="@{/contacts}" class="btn btn-danger">Go back</a>
-        </div>
-
-    </form>
-
-</div>
-
-<div th:replace="~{fragments/footer::footer-section}"></div>
-
-</body>
+    </body>
 </html>

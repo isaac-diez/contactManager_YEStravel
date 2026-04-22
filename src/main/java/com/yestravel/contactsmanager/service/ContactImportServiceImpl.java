@@ -58,6 +58,9 @@ public class ContactImportServiceImpl implements ContactImportService {
                 .addColumn("email")
                 .addColumn("birthdayReminder")
                 .addColumn("birthDate")
+                .addColumn("title")
+                .addColumn("company")
+                .addColumn("position")
                 .setUseHeader(true)
                 .setReorderColumns(true)
                 .build();
