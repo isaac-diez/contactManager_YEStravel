@@ -1,92 +1,106 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/header::header-section(title='Delete Contact')}"></head>
-<body class="bg-light">
+    <body class="bg-light">
 
-<div th:replace="~{fragments/navbar::navbar-section}"></div>
-<div class="container-md px-0 px-md-3">
+        <div th:replace="~{fragments/navbar::navbar-section}"></div>
+        <div class="container-md px-0 px-md-3">
 
-    <div class="row mb-4 pt-5 mx-0 px-3 px-md-0">
-        <div class="col-12 text-center">
-            <h1 class="display-5 fw-bold text-primary">
-                <i class="bi bi-person-dash"></i> Delete Contact
-            </h1>
+            <div class="row mb-4 pt-5 mx-0 px-3 px-md-0">
+                <div class="col-12 text-center">
+                    <h1 class="display-5 fw-bold text-primary">
+                        <i class="bi bi-person-dash"></i> Delete Contact
+                    </h1>
+                </div>
+            </div>
+
+
+            <form class="px-3 px-md-0" action="/contacts/delete" th:object="${contactToDelete}" method="post">
+                <input type="hidden" th:field="*{id}"/>
+                <div class="row g-4">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control bg-light" id="title" name="title"
+                                   th:field="*{title}" readonly>
+                            <label for="title" class="form-label">Title</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control bg-light" id="firstNameCh" name="firstNameCh"
+                                   th:field="*{firstNameCh}" readonly>
+                            <label for="firstNameCh" class="form-label">姓名</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control bg-light" id="firstNameEng"
+                                   th:field="*{firstNameEng}" readonly>
+                            <label for="firstNameEng">Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control bg-light" id="familyNameEng" name="familyNameEng"
+                                   th:field="*{familyNameEng}" readonly>
+                            <label for="familyNameEng" class="form-label">Family Name</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control bg-light" id="company" name="company"
+                                   th:field="*{company}" readonly>
+                            <label for="company" class="form-label">Company</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control bg-light" id="position" name="position"
+                                   th:field="*{position}" readonly>
+                            <label for="position" class="form-label">Position</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="tel" class="form-control bg-light" id="mobilePhone" name="mobilePhone"
+                                   th:field="*{mobilePhone}" readonly>
+                            <label for="mobilePhone" class="form-label">Mobile Phone</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control bg-light" id="email" name="email"
+                                   placeholder="name@example.com"
+                                   th:field="*{email}" readonly>
+                            <label for="email" class="form-label">Email address</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating mb-3">
+                            <input type="date" class="form-control bg-light" id="birthDate" name="birthDate"
+                                   th:field="*{birthDate}" readonly>
+                            <label for="birthDate" class="form-label">Birthdate</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-5">
+                    <button type="submit"
+                            class="btn btn-outline-danger me-3 btn-delete-confirm"
+                            data-hover-text="SURE? CAN'T BE UNDONE!">
+                        <strong>DELETE CONTACT</strong>
+                    </button>
+                    <a href="/contacts" class="btn btn-warning">Go back</a>
+                </div>
+
+            </form>
+
+            <!--    Footer  -->
+            <div th:replace="~{fragments/footer::footer-section}"></div>
         </div>
-    </div>
-
-
-    <form class="px-3 px-md-0" action="/contacts/delete" th:object="${contactToDelete}" method="post">
-        <input type="hidden" th:field="*{id}"/>
-        <div class="row g-2">
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control bg-light" id="firstNameEng"
-                           th:field="*{firstNameEng}" readonly>
-                    <label for="firstNameEng">Name</label>
-                </div>
-            </div>
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control bg-light" id="familyNameEng" name="familyNameEng"
-                           th:field="*{familyNameEng}" readonly>
-                    <label for="familyNameEng" class="form-label">Family Name</label>
-                </div>
-            </div>
-        </div>
-        <div class="row g-2">
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control bg-light" id="firstNameCh" name="firstNameCh"
-                           th:field="*{firstNameCh}" readonly>
-                    <label for="firstNameCh" class="form-label">姓</label>
-                </div>
-            </div>
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control bg-light" id="familyNameCh" name="familyNameCh"
-                           th:field="*{familyNameCh}" readonly>
-                    <label for="familyNameCh" class="form-label">名字</label>
-                </div>
-            </div>
-        </div>
-        <div class="row g-3">
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="tel" class="form-control bg-light" id="mobilePhone" name="mobilePhone"
-                           th:field="*{mobilePhone}" readonly>
-                    <label for="mobilePhone" class="form-label">Mobile Phone</label>
-                </div>
-            </div>
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control bg-light" id="email" name="email"
-                           placeholder="name@example.com"
-                           th:field="*{email}" readonly>
-                    <label for="email" class="form-label">Email address</label>
-                </div>
-            </div>
-            <div class="col-md">
-                <div class="form-floating mb-3">
-                    <input type="date" class="form-control bg-light" id="birthDate" name="birthDate"
-                           th:field="*{birthDate}" readonly>
-                    <label for="birthDate" class="form-label">Birthdate</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="text-center mt-5">
-            <button type="submit"
-                    class="btn btn-outline-danger me-3 btn-delete-confirm"
-                    data-hover-text="SURE? CAN'T BE UNDONE!">
-                <strong>DELETE CONTACT</strong>
-            </button>
-            <a href="/contacts" class="btn btn-warning">Go back</a>
-        </div>
-
-    </form>
-
-    <!--    Footer  -->
-    <div th:replace="~{fragments/footer::footer-section}"></div>
-
-</body>
+    </body>
 </html>
