@@ -18,11 +18,13 @@ public class ContactMapperImpl implements ContactMapper {
         dto.setFamilyNameCh(contact.getFamilyNameCh());
         dto.setEmail(contact.getEmail());
         dto.setMobilePhone(contact.getMobilePhone());
-        dto.setEmail(contact.getEmail());
         dto.setBirthDate(contact.getBirthDate());
         dto.setBirthdayReminder(contact.isBirthdayReminder());
         dto.setUserId(contact.getUser().getId());
         dto.setUserName(contact.getUser().getUsername());
+        dto.setTitle(contact.getTitle());
+        dto.setCompany(contact.getCompany());
+        dto.setPosition(contact.getPosition());
 
         return dto;
     }
@@ -38,9 +40,11 @@ public class ContactMapperImpl implements ContactMapper {
         contact.setFamilyNameCh(dto.getFamilyNameCh());
         contact.setEmail(dto.getEmail());
         contact.setMobilePhone(dto.getMobilePhone());
-        contact.setEmail(dto.getEmail());
         contact.setBirthDate(dto.getBirthDate());
         contact.setBirthdayReminder(dto.isBirthdayReminder());
+        contact.setTitle(dto.getTitle());
+        contact.setCompany(dto.getCompany());
+        contact.setPosition(dto.getPosition());
 
         return contact;
     }
@@ -55,5 +59,8 @@ public class ContactMapperImpl implements ContactMapper {
         contact.setMobilePhone(dto.getMobilePhone());
         contact.setBirthDate(dto.getBirthDate());
         contact.setBirthdayReminder(dto.isBirthdayReminder());
+        contact.setTitle(dto.getTitle());
+        contact.setCompany(dto.getCompany());
+        contact.setPosition(dto.getPosition());
     }
 }
