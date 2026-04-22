@@ -16,6 +16,9 @@ public class ContactFormDTO {
     private String mobilePhone;
     private String email;
     private boolean birthdayReminder;
+    private String title;
+    private String company;
+    private String position;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
