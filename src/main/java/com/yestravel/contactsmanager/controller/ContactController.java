@@ -13,6 +13,9 @@ import com.yestravel.contactsmanager.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -53,19 +56,30 @@ public class ContactController {
     public String listContact(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "sortField", defaultValue = "firstNameEng") String sortField,
+            @RequestParam(name = "sortDir", defaultValue = "asc") String sortDir,
             @RequestParam(value = "search", required = false) String search,
             Model model) {
 
+        Sort sort = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortField).ascending()
+                : Sort.by(sortField).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
         Page<Contact> contactPage;
         if (search != null && !search.isEmpty()) {
-            contactPage = contactService.searchContacts(search, page, size);
+            contactPage = contactService.searchContacts(search, pageable);
             model.addAttribute("search", search);
         } else {
-            contactPage = contactService.getContacts(page, size);
+            contactPage = contactService.getContacts(pageable);
         }
 
         //contactPage.forEach(contact -> logger.info(contact.toString()));
-        model.addAttribute("contactPage",contactPage);
+        model.addAttribute("contactPage", contactPage);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         return "contacts"; //contacts.html
     }
 

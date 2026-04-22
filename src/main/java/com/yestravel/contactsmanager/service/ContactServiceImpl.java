@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -33,9 +34,8 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Page<Contact> getContacts(int pageNumber, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
-        return contactRepo.findAll(pageRequest);
+    public Page<Contact> getContacts(Pageable pageable) {
+        return contactRepo.findAll(pageable);
     }
 
     @Override
@@ -44,9 +44,8 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Page<Contact> searchContacts(String query, int pageNumber, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
-        return contactRepo.searchContacts(query, pageRequest);
+    public Page<Contact> searchContacts(String query, Pageable pageable) {
+        return contactRepo.searchContacts(query, pageable);
     }
 
     @Override

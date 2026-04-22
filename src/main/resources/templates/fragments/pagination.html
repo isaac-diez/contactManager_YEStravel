@@ -7,14 +7,14 @@
             <!-- First -->
             <li class="page-item" th:if="${pageObj.number > 0}">
                 <a class="page-link"
-                   th:href="@{${basePath}(search=${param.search}, page=0,size=${pageObj.size})}"
+                   th:href="@{${basePath}(search=${param.search}, page=0,size=${pageObj.size}, sortField=${sortField}, sortDir=${sortDir})}"
                    aria-label="First"><span aria-hidden="true">« First</span></a>
             </li>
 
             <!-- Previous -->
             <li class="page-item" th:if="${pageObj.hasPrevious()}">
                 <a class="page-link"
-                   th:href="@{${basePath}(search=${param.search}, page=${pageObj.number - 1}, size=${pageObj.size})}"
+                   th:href="@{${basePath}(search=${param.search}, page=${pageObj.number - 1}, size=${pageObj.size}, sortField=${sortField}, sortDir=${sortDir})}"
                    aria-label="Previous"><span aria-hidden="true">&lsaquo; Prev</span></a>
             </li>
 
@@ -26,7 +26,7 @@
 
                 <a class="page-link"
                    th:if="${i != pageObj.number}"
-                   th:href="@{${basePath}(search=${param.search}, page=${i}, size=${pageObj.size})}"
+                   th:href="@{${basePath}(search=${param.search}, page=${i}, size=${pageObj.size}, sortField=${sortField}, sortDir=${sortDir})}"
                    th:text="${i + 1}">1</a>
 
                 <span class="page-link"
@@ -36,13 +36,13 @@
 
             <li class="page-item" th:if="${pageObj.hasNext()}">
                 <a class="page-link"
-                   th:href="@{${basePath}(search=${param.search}, page=${pageObj.number + 1}, size=${pageObj.size})}"
+                   th:href="@{${basePath}(search=${param.search}, page=${pageObj.number + 1}, size=${pageObj.size}, sortField=${sortField}, sortDir=${sortDir})}"
                    aria-label="Next"><span aria-hidden="true">Next &rsaquo;</span></a>
             </li>
 
             <li class="page-item" th:if="${!pageObj.last}">
                 <a class="page-link"
-                   th:href="@{${basePath}(search=${param.search}, page=${pageObj.totalPages - 1}, size=${pageObj.size})}"
+                   th:href="@{${basePath}(search=${param.search}, page=${pageObj.totalPages - 1}, size=${pageObj.size}, sortField=${sortField}, sortDir=${sortDir})}"
                    aria-label="Last"><span aria-hidden="true">Last &raquo;</span></a>
             </li>
         </ul>

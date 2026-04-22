@@ -15,9 +15,9 @@ public interface ContactRepo extends JpaRepository<Contact, Long> {
     Page<Contact> findAll(Pageable pageable);
 
     @Query(value = "SELECT * FROM contacts c WHERE " +
-            "DAYOFYEAR(c.birth_date) >= DAYOFYEAR(CURDATE() + INTERVAL 1 DAY) " +
+            "DAYOFYEAR(c.birth_date) >= DAYOFYEAR(CURDATE() - INTERVAL 14 DAY) " +
             "ORDER BY MONTH(c.birth_date) ASC, DAY(c.birth_date) ASC, c.id ASC",
-            countQuery = "SELECT count(*) FROM contacts WHERE DAYOFYEAR(birth_date) >= DAYOFYEAR(CURDATE() + INTERVAL 1 DAY)",
+            countQuery = "SELECT count(*) FROM contacts WHERE DAYOFYEAR(birth_date) >= DAYOFYEAR(CURDATE() - INTERVAL 14 DAY)",
             nativeQuery = true)
     Page<Contact> findUpcomingBirthdays(Pageable pageable);
 
