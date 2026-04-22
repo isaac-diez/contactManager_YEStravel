@@ -12,9 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -55,7 +53,9 @@ class ContactServiceImplTest {
 
         when(contactRepo.findAll(any(PageRequest.class))).thenReturn(mockPage);
 
-        Page<Contact> result = contactService.getContacts(0, 10);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("firstNameEng").ascending());
+
+        Page<Contact> result = contactService.getContacts(pageable);
 
         assertNotNull(result);
         assertEquals(3, result.getTotalElements());
