@@ -30,6 +30,9 @@ public class Contact {
     private String mobilePhone;
     private String email;
     private boolean birthdayReminder = true;
+    private String title;
+    private String company;
+    private String position;
 
     @Column(name = "birth_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
